@@ -1,0 +1,42 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 60px;
+  margin-bottom: 40px;
+  font-family: 'Inter', sans-serif;
+  &__icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50px;
+    background: #ECF2FF;
+  }
+  &__image {
+    align-self: center;
+  }
+  &__plus {
+    position: absolute;
+    bottom: 0;
+    right: 70%;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  &__title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  &__description {
+    color: #808080;
+    font-size: 16px;
+    font-weight: 300;
+  }
+}

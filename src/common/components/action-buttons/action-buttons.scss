@@ -1,0 +1,17 @@
+.actions {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  &__button {
+    display: inline-flex;
+    justify-content: center;
+    height: 50px;
+    &.reject {
+      color: #808080;
+    }
+    &.accept {
+      width: 150px;
+    }
+  }
+
+}
