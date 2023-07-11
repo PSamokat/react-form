@@ -23,7 +23,7 @@
       align-items: center;
       color: #b8b8b8;
     }
-    &:hover {
+    &:not(.disabled):hover {
      border-color: #4096ff;
      img, span {
        filter: invert(47%) sepia(74%) saturate(1518%) hue-rotate(194deg) brightness(101%) contrast(102%);
@@ -39,6 +39,14 @@
     }
     &.error {
       border-color: #ff0000;
+    }
+    &.disabled {
+      color: rgba(0, 0, 0, 0.25);
+      background-color: rgba(0, 0, 0, 0.04);
+      border-color: #d9d9d9;
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 1;
     }
   }
 

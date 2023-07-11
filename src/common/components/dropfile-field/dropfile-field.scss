@@ -1,0 +1,70 @@
+.dropfile {
+  &__label{
+    margin-bottom: 10px;
+    color: #808080;
+  }
+  &__field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px dotted #9b9b9b;
+
+    transition: all 0.2s ease-in-out ;
+    &.active {
+      border-color: #4096ff;
+      box-shadow: 0 0 0 2px #0591FF19;
+      background-color: #FBFBFB;
+    }
+    &.disabled {
+      color: #0000003F;
+      background-color: #0000000A;
+      cursor: not-allowed;
+
+      .dropfile__button {
+        background-color: #ababab;
+        pointer-events: none;
+        cursor: not-allowed;
+        transition: all 0.2s ease-in-out;
+      }
+    }
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 12px;
+    &-empty {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &-droped {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  &__placeholder {
+    color: #BFBFBF;
+  }
+  &__document {
+    color: #5795FD;
+    &:before {
+      content: '✓';
+      color: #16BB5B;
+      margin-right: 12px;
+    }
+  }
+  &__delete {
+    margin-right: 12px;
+  }
+  &__button {
+    width: 50px;
+    height: 40px;
+    border-radius: 0 8px 8px 0;
+    background: #5795FD;
+  }
+}

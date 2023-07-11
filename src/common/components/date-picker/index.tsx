@@ -15,9 +15,8 @@ const SimpleDatePicker: React.FC<SimpleDatePickerProps> = ({
     name, label, required, ...props
 }) => {
     const [field, meta, helper] = useField(name);
-    const onChangeHandler: DatePickerProps['onChange'] = (date, dateString) => {
+    const onChangeHandler: DatePickerProps['onChange'] = (date) => {
         helper.setValue(date);
-        console.log(date, dateString);
     };
 
     const dateFormat = 'DD.MM.YYYY';

@@ -1,13 +1,15 @@
 import createSagaMiddleware from 'redux-saga';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import reducer from './reducers/form';
+import suggestions from './reducers/dadata';
+import form from './reducers/form';
 import RootSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
-    form: reducer,
+    form,
+    suggestions,
 });
 
 export const store = configureStore({

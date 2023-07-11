@@ -1,5 +1,5 @@
 .actions {
-  margin-top: 60px;
+  margin-top: auto;
   display: flex;
   justify-content: space-between;
   &__button {
@@ -10,6 +10,8 @@
       color: #808080;
     }
     &.accept {
+      display: flex;
+      align-items: center;
       width: 150px;
     }
   }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
-import { FormRoutes } from '../route-to-component-relation';
+import { FormRoutes } from 'src/forms/route-to-component-relation';
 
 const RegistrationAddress: React.FC = () => (
     <div>

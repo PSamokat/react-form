@@ -7,7 +7,7 @@ interface ActionButtonProps {
     rejectText?: string;
     acceptText?: string;
     onAccept?: (value: unknown) => Promise<void>;
-    onReject?: (value: unknown) => Promise<void>;
+    onReject?: (value: unknown) => unknown;
     isLoading?: boolean;
 }
 const ActionButtons: React.FC<ActionButtonProps> = ({

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
@@ -8,9 +8,11 @@ import ActionButtons from 'src/common/components/action-buttons';
 import DatePicker from 'src/common/components/date-picker';
 import FormHeader from 'src/common/components/form-header';
 import GenderSwitch from 'src/common/components/gender-switch';
+import SearchSelect from 'src/common/components/search-select';
 import SimpleField from 'src/common/components/simple-field';
-import SimpleSelect from 'src/common/components/simple-select';
 import type { RootState } from 'Src/store';
+import { suggestionActions } from 'src/store/reducers/dadata';
+import { formActions } from 'src/store/reducers/form';
 
 import { FormRoutes } from '../route-to-component-relation';
 
@@ -22,26 +24,26 @@ import './general-info.scss';
 
 const GeneralInfo: React.FC = () => {
     const fields = useSelector((state: RootState) => state.form);
+    const suggestions = useSelector(
+        (state: RootState) => state.suggestions,
+    );
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const optionsCity = [
-        { value: 'Москва', label: 'Москва' },
-        { value: 'Санкт-Петербург', label: 'Санкт-Петербург' },
-        { value: 'Екатеринбург', label: 'Екатеринбург' },
-        { value: 'Оренбург', label: 'Оренбург' },
-    ];
-    const optionsCitizenship = [
-        { value: 'Россия', label: 'Россия' },
-        { value: 'Беларусь', label: 'Беларусь' },
-        { value: 'Казахстан', label: 'Казахстан' },
-    ];
     const submitHandler = async (value: GeneralInfoFieldsModel): Promise<void> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(value);
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        dispatch(formActions.setGeneralInfo(value));
         navigate(FormRoutes.OWNERSHIP);
+    };
+    const countrySuggestionHandler = (search: string) => {
+        dispatch(suggestionActions.getCountriesSuggestions(search));
+    };
+
+    const citySuggestionHandler = (search: string) => {
+        dispatch(suggestionActions.getCitiesSuggestions(search));
     };
 
     return (
-        <div className="general-info">
+        <div className="general">
             <FormHeader
                 image={ generalIcon }
                 title="Общие"
@@ -54,7 +56,7 @@ const GeneralInfo: React.FC = () => {
             >
                 { (props) => (
                     <Form>
-                        <Row gutter={ [40, 10] }>
+                        <Row gutter={ [30, 10] }>
                             <Col span={ 12 }>
                                 <SimpleField
                                     name="firstName"
@@ -83,27 +85,35 @@ const GeneralInfo: React.FC = () => {
                                 />
                             </Col>
                             <Col span={ 12 }>
-                                <SimpleSelect
-                                    options={ optionsCity }
+                                <SearchSelect
                                     name="city"
                                     required={ true }
                                     disabled={ props.isSubmitting }
                                     label="Основной город"
                                     placeholder="Город"
+                                    getOptions={ citySuggestionHandler }
+                                    isFetching={ suggestions.citiesSuggestions.isFetching }
+                                    options={ suggestions.citiesSuggestions.cities }
                                 />
                             </Col>
                             <Col span={ 12 }>
-                                <SimpleSelect
-                                    options={ optionsCitizenship }
+                                <SearchSelect
                                     name="citizenship"
                                     required={ true }
-                                    disabled={ props.isSubmitting }
                                     label="Гражданство"
+                                    disabled={ props.isSubmitting }
                                     placeholder="Страна"
+                                    getOptions={ countrySuggestionHandler }
+                                    isFetching={ suggestions.countriesSuggestions.isFetching }
+                                    options={ suggestions.countriesSuggestions.countries }
                                 />
                             </Col>
                             <Col span={ 6 }>
-                                <GenderSwitch name="gender" required={ true } />
+                                <GenderSwitch
+                                    name="gender"
+                                    required={ true }
+                                    disabled={ props.isSubmitting }
+                                />
                             </Col>
                             <Col span={ 6 }>
                                 <DatePicker
@@ -124,6 +134,7 @@ const GeneralInfo: React.FC = () => {
                             </Col>
                         </Row>
                         <ActionButtons
+                            onReject={ props.resetForm }
                             isLoading={ props.isSubmitting }
                             acceptText="Далее"
                             rejectText="Отмена"

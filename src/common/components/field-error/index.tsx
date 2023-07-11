@@ -11,7 +11,7 @@ const FieldError: React.FC<FieldErrorProps> = ({
     visibility,
     errorMessage,
 }) => (
-    <div className={ `field-error ${visibility && 'visible'}` }>
+    <div className={ `field-error${visibility ? ' visible' : ''}` }>
         { errorMessage }
     </div>
 );

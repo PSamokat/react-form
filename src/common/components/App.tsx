@@ -22,7 +22,7 @@ const App: React.FC = () => (
 
                         return <Route key={ route } path={ route } element={ <Component /> } />;
                     }) }
-                    <Route path="*" element={ <Navigate to="/general" /> } />
+                    <Route path="*" element={ <Navigate to="/ownership" /> } />
                 </Routes>
             </div>
         </div>

@@ -10,9 +10,10 @@ import './gender-switch.scss';
 interface GenderSwitchProps {
     name?: string;
     required?: boolean;
+    disabled?: boolean;
 }
 
-const GenderSwitch: React.FC<GenderSwitchProps> = ({ name, required = false }) => {
+const GenderSwitch: React.FC<GenderSwitchProps> = ({ name, required = false, disabled }) => {
     const [field, meta, helper] = useField(name);
     const handleToggle = (value: Gender) => {
         helper.setValue(value);
@@ -28,7 +29,9 @@ const GenderSwitch: React.FC<GenderSwitchProps> = ({ name, required = false }) =
                 <button
                     type="button"
                     className={ `switch__button ${field.value === Gender.MALE ? 'active' : ''} 
-                    ${meta.touched && meta.error && 'error'}` }
+                    ${meta.touched && meta.error ? 'error' : ''} 
+                    ${disabled ? 'disabled' : ''}` }
+                    disabled={ disabled }
                     onClick={ () => handleToggle(Gender.MALE) }
                 >
                     <div className="switch__button-icon ">
@@ -39,7 +42,9 @@ const GenderSwitch: React.FC<GenderSwitchProps> = ({ name, required = false }) =
                 <button
                     type="button"
                     className={ `switch__button ${field.value === Gender.FEMALE ? 'active' : ''} 
-                    ${meta.touched && meta.error && 'error'}` }
+                    ${meta.touched && meta.error && 'error'} 
+                    ${disabled ? 'disabled' : ''}` }
+                    disabled={ disabled }
                     onClick={ () => handleToggle(Gender.FEMALE) }
                 >
                     <div className="switch__button-icon ">

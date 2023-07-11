@@ -13,6 +13,12 @@ button, input[type="submit"], input[type="reset"] {
   cursor: pointer;
   outline: inherit;
 }
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 3;
+}
 .app {
   margin: 15px auto;
   display: flex;
@@ -27,5 +33,6 @@ button, input[type="submit"], input[type="reset"] {
   }
   &__form {
     width: 100%;
+    padding: 80px 100px;
   }
 }

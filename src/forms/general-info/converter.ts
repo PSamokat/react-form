@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import type { CustomerInfo } from 'Src/common/types/customer';
 
 import type { GeneralInfoFieldsModel } from './form-model';
@@ -16,7 +17,7 @@ export function convertToInitialValues(data: CustomerInfo): GeneralInfoFieldsMod
         city,
         citizenship,
         gender,
-        birthDate,
+        birthDate: dayjs(birthDate),
         birthPlace,
     };
 }

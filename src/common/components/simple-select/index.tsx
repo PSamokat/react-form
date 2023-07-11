@@ -5,21 +5,16 @@ import FieldError from 'src/common/components/field-error';
 
 import './simple-select.scss';
 
-interface SimpleInputProps {
+interface SimpleInputProps extends SelectProps{
     name?: string;
     label?: string;
-    disabled?: boolean;
     required?: boolean;
-    options?: Array<{ value: string; label: string }>;
-    placeholder?: string;
 }
 const SimpleSelect: React.FC<SimpleInputProps> = ({
     name,
     label,
-    disabled = false,
     required = false,
-    options,
-    placeholder,
+    ...props
 }) => {
     const [field, meta, helper] = useField(name);
     const onChangeHandler: SelectProps['onChange'] = (value) => {
@@ -34,10 +29,8 @@ const SimpleSelect: React.FC<SimpleInputProps> = ({
             </div>
             <Select
                 { ...field }
+                { ...props }
                 defaultValue={ null }
-                disabled={ disabled }
-                options={ options }
-                placeholder={ placeholder }
                 status={ meta.error && meta.touched && 'error' }
                 onChange={ onChangeHandler }
                 size="large"
