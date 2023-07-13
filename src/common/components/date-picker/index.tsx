@@ -15,7 +15,7 @@ const SimpleDatePicker: React.FC<SimpleDatePickerProps> = ({
     name, label, required, ...props
 }) => {
     const [field, meta, helper] = useField(name);
-    const onChangeHandler: DatePickerProps['onChange'] = (date) => {
+    const handleOnChange: DatePickerProps['onChange'] = (date) => {
         helper.setValue(date);
     };
 
@@ -29,7 +29,7 @@ const SimpleDatePicker: React.FC<SimpleDatePickerProps> = ({
             </div>
             <DatePicker
                 { ...field }
-                onChange={ onChangeHandler }
+                onChange={ handleOnChange }
                 { ...props }
                 status={ meta.error && meta.touched && 'error' }
                 format={ dateFormat }

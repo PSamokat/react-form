@@ -17,7 +17,7 @@ const SimpleSelect: React.FC<SimpleInputProps> = ({
     ...props
 }) => {
     const [field, meta, helper] = useField(name);
-    const onChangeHandler: SelectProps['onChange'] = (value) => {
+    const handleOnChange: SelectProps['onChange'] = (value) => {
         helper.setValue(value);
     };
 
@@ -32,7 +32,7 @@ const SimpleSelect: React.FC<SimpleInputProps> = ({
                 { ...props }
                 defaultValue={ null }
                 status={ meta.error && meta.touched && 'error' }
-                onChange={ onChangeHandler }
+                onChange={ handleOnChange }
                 size="large"
                 className="select__field"
             />

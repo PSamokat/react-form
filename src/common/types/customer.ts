@@ -8,8 +8,8 @@ export interface CustomerInfo {
         gender?: Gender;
         birthDate?: number;
         birthPlace?: string;
-        registration?: Record<string, unknown>;
-        residential?: Record<string, unknown>;
+        registration?: CustomerAddress;
+        residential?: Omit<CustomerAddress, 'registrationDate'>;
         socials?: [];
     };
     legalInfo: {
@@ -22,6 +22,30 @@ export interface CustomerInfo {
         hasContract?: boolean;
     };
     documentsValidationStatus: ValidationStatus;
+}
+
+export interface AddressData {
+    name?: string;
+    fiasId?: string;
+}
+
+export interface CountryData {
+    name: string;
+    code: string;
+}
+
+export interface CustomerAddress {
+    country?: {
+        name?: string;
+        value?: string;
+    };
+    region?: AddressData;
+    city?: AddressData;
+    street?: AddressData;
+    house?: AddressData;
+    apartment?: AddressData;
+    hasNoApartment?: boolean;
+    registrationDate?: string;
 }
 
 export enum Gender {

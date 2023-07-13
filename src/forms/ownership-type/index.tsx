@@ -17,33 +17,33 @@ import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 import { ownershipTypeScheme } from 'src/forms/ownership-type/validation';
 import { FormRoutes } from 'src/forms/route-to-component-relation';
 import { RootState } from 'src/store';
-import { suggestionActions } from 'src/store/reducers/dadata';
 import { formActions } from 'src/store/reducers/form';
+import { partySuggestionActions } from 'src/store/reducers/party-suggestion';
 
 import './ownership-type.scss';
 
 const OwnershipType: React.FC = () => {
     const fields = useSelector((state: RootState) => state.form);
-    const isFetching = useSelector(
-        (state: RootState) => state.suggestions.legalInfoSuggest.isFetching,
-    );
+    const partySuggestion = useSelector((state: RootState) => state.partySuggestion);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const opfTypeOptions: DefaultOptionType[] = [
         { value: OpfType.LEGAL, label: 'Общество с ограниченной ответственностью (ООО)' },
         { value: OpfType.INDIVIDUAL, label: 'Индивидуальный предприниматель (ИП)' },
     ];
-    const searchPartyInfoHandler = (querySearch: string, type: OpfType) => {
-        dispatch(suggestionActions.getPartyInfo({ querySearch, type }));
-    };
-    const submitHandler = async (data: OwnershipTypeFieldModel): Promise<void> => {
+
+    const handleSubmit = async (data: OwnershipTypeFieldModel): Promise<void> => {
         dispatch(formActions.setOwnershipInfo(data));
         await new Promise((resolve) => setTimeout(resolve, 800));
         navigate(FormRoutes.REGISTRATION);
     };
 
-    const rejectHandler = () => {
+    const handleReject = () => {
         navigate(FormRoutes.GENERAL);
+    };
+
+    const handlePartyInfoSearch = (querySearch: string, type: OpfType) => {
+        dispatch(partySuggestionActions.getPartyInfo({ querySearch, type }));
     };
 
     return (
@@ -56,31 +56,31 @@ const OwnershipType: React.FC = () => {
             <Formik
                 enableReinitialize={ true }
                 initialValues={ convertToInitialValues(fields) }
-                onSubmit={ submitHandler }
+                onSubmit={ handleSubmit }
                 validationSchema={ ownershipTypeScheme }
             >
-                { (props) => (
-                    <Form onSubmit={ props.handleSubmit }>
+                { ({ isSubmitting, values }) => (
+                    <Form>
                         <Row>
                             <Col span={ 18 }>
                                 <SimpleSelect
                                     name="opfType"
                                     label="Вид деятельности"
                                     required={ true }
-                                    disabled={ props.isSubmitting }
+                                    disabled={ isSubmitting }
                                     options={ opfTypeOptions }
                                     placeholder="Укажите вид"
                                 />
                             </Col>
                         </Row>
-                        { props.values.opfType === OpfType.INDIVIDUAL && (
+                        { values.opfType === OpfType.INDIVIDUAL && (
                             <Row gutter={ [30, 10] }>
                                 <Col span={ 7 }>
                                     <SimpleField
                                         name="inn"
                                         label="ИНН"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                         placeholder="хххххххххх"
                                         maxLength={ 12 }
                                     />
@@ -89,7 +89,7 @@ const OwnershipType: React.FC = () => {
                                     <DropFileField
                                         label="Скан ИНН"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                                 <Col span={ 7 }>
@@ -97,7 +97,7 @@ const OwnershipType: React.FC = () => {
                                         name="registrationDate"
                                         label="Дата регистрации"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                                 <Col span={ 12 }>
@@ -105,7 +105,7 @@ const OwnershipType: React.FC = () => {
                                         name="ogrn"
                                         label="ОГРНИП"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                         placeholder="ххххххххххххххх"
                                         maxLength={ 15 }
                                     />
@@ -114,20 +114,20 @@ const OwnershipType: React.FC = () => {
                                     <DropFileField
                                         label="Скан ОГРНИП"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                                 <Col span={ 12 }>
                                     <DropFileField
                                         label="Скан договора аренды помещения (офиса)"
-                                        disabled={ props.values.hasContract || props.isSubmitting }
+                                        disabled={ values.hasContract || isSubmitting }
                                     />
                                 </Col>
                                 <Col span={ 12 }>
                                     <DropFileField
                                         label="Скан выписки из ЕГРИП (не старше 3 месяцев)"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                                 <Col>
@@ -137,7 +137,7 @@ const OwnershipType: React.FC = () => {
                                             <Checkbox
                                                 { ...field }
                                                 className="ownership__contract"
-                                                disabled={ props.isSubmitting }
+                                                disabled={ isSubmitting }
                                             >
                                                 Нет договора
                                             </Checkbox>
@@ -146,7 +146,7 @@ const OwnershipType: React.FC = () => {
                                 </Col>
                             </Row>
                         ) }
-                        { props.values.opfType === OpfType.LEGAL && (
+                        { values.opfType === OpfType.LEGAL && (
                             <Row gutter={ [30, 10] }>
                                 <Col span={ 7 }>
                                     <SimpleField
@@ -154,10 +154,10 @@ const OwnershipType: React.FC = () => {
                                         label="ИНН"
                                         placeholder="хххххххххх"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                         onSearch={ (query) =>
-                                            searchPartyInfoHandler(query, props.values.opfType) }
-                                        isLoading={ isFetching }
+                                            handlePartyInfoSearch(query, values.opfType) }
+                                        isLoading={ partySuggestion.isFetching }
                                         maxLength={ 10 }
                                     />
                                 </Col>
@@ -165,7 +165,7 @@ const OwnershipType: React.FC = () => {
                                     <DropFileField
                                         label="Скан ИНН"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                                 <Col span={ 7 }>
@@ -173,8 +173,7 @@ const OwnershipType: React.FC = () => {
                                         name="registrationDate"
                                         label="Дата регистрации"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
-
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                                 <Col span={ 16 }>
@@ -182,7 +181,7 @@ const OwnershipType: React.FC = () => {
                                         name="fullName"
                                         label="Название полное"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                         placeholder="ООО «Московская промышленная компания»"
                                     />
                                 </Col>
@@ -191,7 +190,7 @@ const OwnershipType: React.FC = () => {
                                         name="shortName"
                                         label="Сокращение"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                         placeholder="ООО «МПК»"
                                     />
                                 </Col>
@@ -200,7 +199,7 @@ const OwnershipType: React.FC = () => {
                                         name="ogrn"
                                         label="ОГРН"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                         placeholder="ххххххххххххх"
                                         maxLength={ 13 }
                                     />
@@ -209,14 +208,14 @@ const OwnershipType: React.FC = () => {
                                     <DropFileField
                                         label="Скан ОГРН"
                                         required={ true }
-                                        disabled={ props.isSubmitting }
+                                        disabled={ isSubmitting }
                                     />
                                 </Col>
                             </Row>
                         ) }
                         <ActionButtons
-                            onReject={ rejectHandler }
-                            isLoading={ props.isSubmitting }
+                            onReject={ handleReject }
+                            isLoading={ isSubmitting }
                             acceptText="Далее"
                             rejectText="Назад"
                         />

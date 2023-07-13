@@ -10,8 +10,10 @@ import FormHeader from 'src/common/components/form-header';
 import GenderSwitch from 'src/common/components/gender-switch';
 import SearchSelect from 'src/common/components/search-select';
 import SimpleField from 'src/common/components/simple-field';
-import type { RootState } from 'Src/store';
-import { suggestionActions } from 'src/store/reducers/dadata';
+import { DaDataGranularType } from 'src/common/types/dadata';
+import type { RootState } from 'src/store';
+import { addressSuggestActions } from 'src/store/reducers/address-suggestion';
+import { countrySuggestionActions } from 'src/store/reducers/country-suggestion';
 import { formActions } from 'src/store/reducers/form';
 
 import { FormRoutes } from '../route-to-component-relation';
@@ -24,22 +26,27 @@ import './general-info.scss';
 
 const GeneralInfo: React.FC = () => {
     const fields = useSelector((state: RootState) => state.form);
-    const suggestions = useSelector(
-        (state: RootState) => state.suggestions,
+    const addressSuggestions = useSelector(
+        (state: RootState) => state.addressSuggestion,
     );
+    const countrySuggestions = useSelector((state: RootState) => state.countrySuggestion);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const submitHandler = async (value: GeneralInfoFieldsModel): Promise<void> => {
+    const handleSubmit = async (value: GeneralInfoFieldsModel): Promise<void> => {
         await new Promise((resolve) => setTimeout(resolve, 800));
         dispatch(formActions.setGeneralInfo(value));
         navigate(FormRoutes.OWNERSHIP);
     };
-    const countrySuggestionHandler = (search: string) => {
-        dispatch(suggestionActions.getCountriesSuggestions(search));
+    const handleCountrySuggestion = (query: string) => {
+        dispatch(countrySuggestionActions.getCountriesSuggestions(query));
     };
 
-    const citySuggestionHandler = (search: string) => {
-        dispatch(suggestionActions.getCitiesSuggestions(search));
+    const handleCitySuggestion = (query: string) => {
+        dispatch(addressSuggestActions.getAddressSuggestions({
+            query,
+            from_bound: { value: DaDataGranularType.CITY },
+            to_bound: { value: DaDataGranularType.CITY },
+        }));
     };
 
     return (
@@ -51,7 +58,7 @@ const GeneralInfo: React.FC = () => {
             />
             <Formik
                 initialValues={ convertToInitialValues(fields) }
-                onSubmit={ submitHandler }
+                onSubmit={ handleSubmit }
                 validationSchema={ generalInfoScheme }
             >
                 { (props) => (
@@ -91,9 +98,9 @@ const GeneralInfo: React.FC = () => {
                                     disabled={ props.isSubmitting }
                                     label="Основной город"
                                     placeholder="Город"
-                                    getOptions={ citySuggestionHandler }
-                                    isFetching={ suggestions.citiesSuggestions.isFetching }
-                                    options={ suggestions.citiesSuggestions.cities }
+                                    getOptions={ handleCitySuggestion }
+                                    isFetching={ addressSuggestions.isFetching }
+                                    options={ addressSuggestions.data }
                                 />
                             </Col>
                             <Col span={ 12 }>
@@ -103,9 +110,9 @@ const GeneralInfo: React.FC = () => {
                                     label="Гражданство"
                                     disabled={ props.isSubmitting }
                                     placeholder="Страна"
-                                    getOptions={ countrySuggestionHandler }
-                                    isFetching={ suggestions.countriesSuggestions.isFetching }
-                                    options={ suggestions.countriesSuggestions.countries }
+                                    getOptions={ handleCountrySuggestion }
+                                    isFetching={ countrySuggestions.isFetching }
+                                    options={ countrySuggestions.countries }
                                 />
                             </Col>
                             <Col span={ 6 }>

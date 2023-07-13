@@ -27,7 +27,7 @@ const SimpleField: React.FC<SimpleInputProps> = ({
 }) => {
     const [field, meta, helper] = useField(name);
 
-    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
         helper.setValue(event.target.value);
         if (event.target.value.length === props.maxLength) {
             onSearch?.(event.target.value);
@@ -48,7 +48,7 @@ const SimpleField: React.FC<SimpleInputProps> = ({
                 status={ meta.error && meta.touched && 'error' }
                 size="large"
                 addonAfter={ isLoading && <LoadingOutlined /> }
-                onChange={ onChangeHandler }
+                onChange={ handleOnChange }
             />
             <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
         </React.Fragment>

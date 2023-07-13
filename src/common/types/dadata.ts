@@ -2,10 +2,13 @@ import { ElementType, HTMLProps, ReactNode } from 'react';
 
 type Nullable<T> = T | null;
 
-export type DaDataSelectOptions = Array<{
+export type DaDataSelectOptions = DaDataSelectOption[];
+
+export interface DaDataSelectOption {
     value: string;
     label: string;
-}>;
+    title: string;
+}
 
 export interface DaDataResponse<T> {
     suggestions: Array<DaDataSuggestion<T>>;
@@ -57,6 +60,16 @@ export interface DaDataAddressMetro {
     name: string;
     line: string;
     distance: number;
+}
+
+export enum DaDataGranularType {
+    COUNTRY = 'country',
+    REGION = 'region',
+    CITY ='city',
+    SETTLEMENT='settlement',
+    STREET = 'street',
+    HOUSE ='house',
+
 }
 
 export type DaDataAddressBeltwayHit = 'IN_MKAD' | 'OUT_MKAD' | 'IN_KAD' | 'OUT_KAD';

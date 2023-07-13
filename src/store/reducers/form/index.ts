@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CustomerInfo, OpfType, ValidationStatus } from 'src/common/types/customer';
-import { DaDataParty } from 'Src/common/types/dadata';
-import { GeneralInfoFieldsModel } from 'Src/forms/general-info/form-model';
-import { OwnershipTypeFieldModel } from 'Src/forms/ownership-type/form-model';
+import { DaDataParty } from 'src/common/types/dadata';
+import { GeneralInfoFieldsModel } from 'src/forms/general-info/form-model';
+import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 
 const initialState: CustomerInfo = {
     personInfo: {
@@ -14,7 +14,16 @@ const initialState: CustomerInfo = {
         birthPlace: undefined,
         lastName: undefined,
         surName: undefined,
-        registration: undefined,
+        registration: {
+            country: undefined,
+            region: undefined,
+            city: undefined,
+            street: undefined,
+            house: undefined,
+            apartment: undefined,
+            hasNoApartment: undefined,
+            registrationDate: undefined,
+        },
         socials: undefined,
         residential: undefined,
     },

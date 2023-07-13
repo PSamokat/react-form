@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { OpfType } from 'Src/common/types/customer';
 import {
-    DaDataAddress, DaDataCountries, DaDataParty, DaDataResponse,
+    DaDataAddress,
+    DaDataCountries,
+    DaDataParty,
+    DaDataResponse,
 } from 'src/common/types/dadata';
+import { AddressQuerySearch } from 'src/store/reducers/address-suggestion';
 
 const API_KEY = '209a5e021611a2e4930ebe2c5fb2b32bf4951e3d';
 const headers = {
@@ -14,22 +18,43 @@ const DaDataCountriesApi = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs
 const DaDataCitiesApi = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
 const DaDataPartyApi = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party';
 
-export const getCountriesRequest = (querySearch: string) =>
+export const getCountriesRequest = (query: string) =>
     axios.post<DaDataResponse<DaDataCountries>>(
         DaDataCountriesApi,
-        { query: querySearch },
+        { query },
         {
             headers,
         },
     );
 
-export const getCitiesRequest = (querySearch: string) =>
+export const getAddressRequest = ({
+    query,
+    country,
+    region,
+    city,
+    settlement,
+    street,
+    house,
+    to_bound,
+    from_bound,
+}: AddressQuerySearch) =>
     axios.post<DaDataResponse<DaDataAddress>>(
         DaDataCitiesApi,
         {
-            query: querySearch,
-            from_bound: { value: 'city' },
-            to_bound: { value: 'city' },
+            query,
+            locations: [
+                {
+                    country,
+                    region,
+                    city,
+                    settlement,
+                    street,
+                    house,
+                },
+            ],
+            from_bound,
+            to_bound,
+            restrict_value: true,
         },
         {
             headers,

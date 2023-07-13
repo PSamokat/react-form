@@ -1,5 +1,5 @@
 import { Dayjs } from 'dayjs';
-import { OpfType } from 'Src/common/types/customer';
+import { OpfType } from 'src/common/types/customer';
 
 export interface OwnershipTypeFieldModel {
     opfType?: OpfType;

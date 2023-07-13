@@ -32,6 +32,8 @@ form {
     background-color: #FAFAFA;
   }
   &__form {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     padding: 80px 100px;
   }

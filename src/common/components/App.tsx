@@ -2,8 +2,7 @@ import React from 'react';
 import {
     BrowserRouter, Navigate, Route, Routes,
 } from 'react-router-dom';
-
-import { routeToComponentRelation } from '../../forms/route-to-component-relation';
+import { routeToComponentRelation } from 'src/forms/route-to-component-relation';
 
 import FormProgress from './form-progress';
 
@@ -22,7 +21,7 @@ const App: React.FC = () => (
 
                         return <Route key={ route } path={ route } element={ <Component /> } />;
                     }) }
-                    <Route path="*" element={ <Navigate to="/ownership" /> } />
+                    <Route path="*" element={ <Navigate to="/registration-address" /> } />
                 </Routes>
             </div>
         </div>
