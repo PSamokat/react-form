@@ -1,7 +1,6 @@
-import { Dayjs } from 'dayjs';
-import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'src/common/types/dadata';
+import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'Src/common/types/dadata';
 
-export interface RegistrationAddressFieldsModel {
+export interface ResidentialAddressFieldsModel {
     country?: FieldWithDaData<DaDataCountries>;
     region?: FieldWithDaData<DaDataAddress>;
     city?: FieldWithDaData<DaDataAddress>;
@@ -9,5 +8,4 @@ export interface RegistrationAddressFieldsModel {
     house?: FieldWithDaData<DaDataAddress>;
     apartment?: string;
     hasNoApartment?: boolean;
-    registrationDate?: Dayjs;
 }

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Input, InputProps } from 'antd';
 import { useField } from 'formik';
@@ -9,30 +9,19 @@ import './simple-field.scss';
 interface SimpleInputProps extends InputProps{
     name?: string;
     label?: string;
-    placeholder?: string;
     disabled?: boolean;
     required?: boolean;
-    onSearch?: (query: string) => void;
     isLoading?: boolean;
 }
 const SimpleField: React.FC<SimpleInputProps> = ({
     name,
     label,
-    placeholder,
     disabled = false,
     required = false,
-    onSearch,
     isLoading,
     ...props
 }) => {
-    const [field, meta, helper] = useField(name);
-
-    const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-        helper.setValue(event.target.value);
-        if (event.target.value.length === props.maxLength) {
-            onSearch?.(event.target.value);
-        }
-    };
+    const [field, meta] = useField(name);
 
     return (
         <React.Fragment>
@@ -43,12 +32,10 @@ const SimpleField: React.FC<SimpleInputProps> = ({
             <Input
                 { ...field }
                 { ...props }
-                placeholder={ placeholder }
                 disabled={ disabled }
                 status={ meta.error && meta.touched && 'error' }
                 size="large"
                 addonAfter={ isLoading && <LoadingOutlined /> }
-                onChange={ handleOnChange }
             />
             <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
         </React.Fragment>

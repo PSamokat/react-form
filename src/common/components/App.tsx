@@ -21,7 +21,7 @@ const App: React.FC = () => (
 
                         return <Route key={ route } path={ route } element={ <Component /> } />;
                     }) }
-                    <Route path="*" element={ <Navigate to="/registration-address" /> } />
+                    <Route path="*" element={ <Navigate to="/residential-address" /> } />
                 </Routes>
             </div>
         </div>

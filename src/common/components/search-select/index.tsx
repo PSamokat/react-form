@@ -1,15 +1,13 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Select, SelectProps } from 'antd';
-import { FormikContextType, useField, useFormikContext } from 'formik';
-import debounce from 'lodash/debounce';
+import { useField } from 'formik';
 import FieldError from 'src/common/components/field-error';
 
 import './search-select.scss';
 
 interface SearchSelectProps<ValueType = any>
     extends Omit<SelectProps<ValueType | ValueType[]>, 'children' > {
-    getOptions: (query: string, formik: FormikContextType<any>) => void;
     debounceTimeout?: number;
     isFetching?: boolean;
     name?: string;
@@ -19,30 +17,33 @@ interface SearchSelectProps<ValueType = any>
 
 const SearchSelect: React.FC<SearchSelectProps> = ({
     name,
-    getOptions,
-    debounceTimeout = 800,
     isFetching,
     label,
     required,
     ...props
 }) => {
-    const formikContext = useFormikContext();
     const [field, meta, helper] = useField(name);
-    const debounceFetch = useMemo(
-        () => debounce(getOptions, debounceTimeout),
-        [getOptions, debounceTimeout],
-    );
-    const handleOnChange: SelectProps['onChange'] = (value: string, option) => {
-        console.log(value, option);
-        helper.setValue(value);
+    const handleOnChange = (value, option) => {
+        helper.setValue({
+            value,
+            dadataObj: option.title,
+        });
     };
 
-    const handleOnSearch = useCallback(
-        (query: string) => {
-            debounceFetch(query, formikContext);
-        },
-        [formikContext],
-    );
+    const handleOnSearch = (value) => {
+        if (value.length === 0) {
+            helper.setValue({
+                value: undefined,
+                dadataObj: {},
+            });
+
+            return;
+        }
+        helper.setValue({
+            value,
+            dadataObj: {},
+        });
+    };
 
     return (
         <div className="select">
@@ -53,7 +54,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
             <Select
                 { ...field }
                 { ...props }
-                labelInValue={ true }
+                value={ field?.value?.value }
                 showSearch={ true }
                 showArrow={ false }
                 onSearch={ handleOnSearch }

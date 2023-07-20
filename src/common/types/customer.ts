@@ -1,10 +1,12 @@
+import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'Src/common/types/dadata';
+
 export interface CustomerInfo {
     personInfo: {
         firstName?: string;
         surName?: string;
         lastName?: string;
-        city?: string;
-        citizenship?: string;
+        city?: FieldWithDaData<DaDataAddress>;
+        citizenship?: FieldWithDaData<DaDataCountries>;
         gender?: Gender;
         birthDate?: number;
         birthPlace?: string;
@@ -24,28 +26,15 @@ export interface CustomerInfo {
     documentsValidationStatus: ValidationStatus;
 }
 
-export interface AddressData {
-    name?: string;
-    fiasId?: string;
-}
-
-export interface CountryData {
-    name: string;
-    code: string;
-}
-
 export interface CustomerAddress {
-    country?: {
-        name?: string;
-        value?: string;
-    };
-    region?: AddressData;
-    city?: AddressData;
-    street?: AddressData;
-    house?: AddressData;
-    apartment?: AddressData;
+    country?: FieldWithDaData<DaDataCountries>;
+    region?: FieldWithDaData<DaDataAddress>;
+    city?: FieldWithDaData<DaDataAddress>;
+    street?: FieldWithDaData<DaDataAddress>;
+    house?: FieldWithDaData<DaDataAddress>;
+    apartment?: string;
     hasNoApartment?: boolean;
-    registrationDate?: string;
+    registrationDate?: number;
 }
 
 export enum Gender {

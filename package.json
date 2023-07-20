@@ -1,79 +1,80 @@
 {
-    "name": "react-form",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@ant-design/icons": "^5.1.4",
-        "@reduxjs/toolkit": "^1.9.5",
-        "@testing-library/jest-dom": "^5.14.1",
-        "@testing-library/react": "^13.0.0",
-        "@testing-library/user-event": "^13.2.1",
-        "@types/jest": "^27.0.1",
-        "@types/node": "^16.7.13",
-        "@types/react": "^18.0.0",
-        "@types/react-dom": "^18.0.0",
-        "antd": "^5.6.1",
-        "axios": "^1.4.0",
-        "dayjs": "^1.11.8",
-        "formik": "^2.2.9",
-        "lodash": "^4.17.21",
-        "moment": "^2.29.4",
-        "rc-select": "^14.5.2",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-dropzone": "^14.2.3",
-        "react-redux": "^8.0.5",
-        "react-router-dom": "^6.10.0",
-        "react-scripts": "5.0.1",
-        "redux-saga": "^1.2.3",
-        "sass": "^1.62.1",
-        "typescript": "*",
-        "web-vitals": "^2.1.0",
-        "yup": "^1.1.1"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.43.0",
-        "@typescript-eslint/parser": "^4.15.2",
-        "babel-eslint": "^10.1.0",
-        "eslint": "^8.0.1",
-        "eslint-config-airbnb": "^19.0.4",
-        "eslint-config-airbnb-typescript": "^9.0.0",
-        "eslint-config-prettier": "^8.8.0",
-        "eslint-config-standard-with-typescript": "^34.0.1",
-        "eslint-import-resolver-typescript": "^2.2.1",
-        "eslint-plugin-cypress": "2.11.1",
-        "eslint-plugin-dirnames": "^1.0.3",
-        "eslint-plugin-import": "^2.25.2",
-        "eslint-plugin-jsx-a11y": "^6.3.1",
-        "eslint-plugin-n": "^15.0.0",
-        "eslint-plugin-prettier": "^4.2.1",
-        "eslint-plugin-promise": "^6.0.0",
-        "eslint-plugin-react": "^7.32.2",
-        "eslint-plugin-react-hooks": "^4.1.0",
-        "eslint-plugin-simple-import-sort": "^5.0.3",
-        "prettier": "2.8.8",
-        "prettier-eslint": "^11.0.0",
-        "prettier-eslint-cli": "^5.0.0"
-    },
-    "eslintConfig": {
-        "extends": "./eslintrc.js"
-    }
+  "name": "react-form",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^5.1.4",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "antd": "^5.6.1",
+    "axios": "^1.4.0",
+    "dayjs": "^1.11.8",
+    "formik": "^2.2.9",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "rc-select": "^14.5.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "5.0.1",
+    "redux-saga": "^1.2.3",
+    "sass": "^1.62.1",
+    "typescript": "*",
+    "use-debounce": "^9.0.4",
+    "web-vitals": "^2.1.0",
+    "yup": "^1.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^4.15.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.0.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-import-resolver-typescript": "^2.2.1",
+    "eslint-plugin-cypress": "2.11.1",
+    "eslint-plugin-dirnames": "^1.0.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.1.0",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
+    "prettier": "2.8.8",
+    "prettier-eslint": "^11.0.0",
+    "prettier-eslint-cli": "^5.0.0"
+  },
+  "eslintConfig": {
+    "extends": "./eslintrc.js"
+  }
 }

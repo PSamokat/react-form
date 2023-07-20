@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CustomerInfo, OpfType, ValidationStatus } from 'src/common/types/customer';
-import { DaDataParty } from 'src/common/types/dadata';
+import { CustomerInfo, ValidationStatus } from 'src/common/types/customer';
 import { GeneralInfoFieldsModel } from 'src/forms/general-info/form-model';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
+import { RegistrationAddressFieldsModel } from 'Src/forms/registration-address/form-model';
 
 const initialState: CustomerInfo = {
     personInfo: {
@@ -25,7 +25,15 @@ const initialState: CustomerInfo = {
             registrationDate: undefined,
         },
         socials: undefined,
-        residential: undefined,
+        residential: {
+            country: undefined,
+            region: undefined,
+            city: undefined,
+            street: undefined,
+            house: undefined,
+            apartment: undefined,
+            hasNoApartment: undefined,
+        },
     },
     legalInfo: {
         hasContract: false,
@@ -49,13 +57,8 @@ const formReducer = createSlice({
         setOwnershipInfo(state: CustomerInfo, action: PayloadAction<OwnershipTypeFieldModel>) {
             state.legalInfo = { ...action.payload, registrationDate: action.payload.registrationDate.valueOf() };
         },
-        setLegalInfoSuggest(state: CustomerInfo, action: PayloadAction<DaDataParty>) {
-            state.legalInfo.opfType = OpfType.LEGAL;
-            state.legalInfo.inn = action.payload?.inn;
-            state.legalInfo.ogrn = action.payload?.ogrn;
-            state.legalInfo.shortName = action.payload?.name.short_with_opf;
-            state.legalInfo.fullName = action.payload?.name.full_with_opf;
-            state.legalInfo.registrationDate = action.payload?.state.registration_date;
+        setRegistrationAddress(state: CustomerInfo, action: PayloadAction<RegistrationAddressFieldsModel>) {
+            state.personInfo.registration = { ...action.payload, registrationDate: action.payload.registrationDate.valueOf() };
         },
     },
 });

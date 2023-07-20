@@ -1,7 +1,11 @@
-.registration-address {
+.residential-address {
   display: flex;
   flex-direction: column;
   flex-grow: 3;
+  &__match {
+    margin-bottom: 30px;
+    color: #808080;
+  }
   &__apartment {
     display: flex;
     align-items: center;
