@@ -18,14 +18,18 @@ import { useDaDataParty } from 'src/common/hooks/dadata';
 import { OpfType } from 'src/common/types/customer';
 import { convertToInitialValues } from 'src/forms/ownership-type/converter';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
-import { ownershipTypeScheme } from 'src/forms/ownership-type/validation';
+import { ownershipScheme } from 'src/forms/ownership-type/validation';
 import { FormRoutes } from 'src/forms/route-to-component-relation';
 import { RootState } from 'src/store';
 import { formActions } from 'src/store/reducers/form';
 
 import './ownership-type.scss';
 
-const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>> = ({ values, isSubmitting, setFieldValue }) => {
+const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>> = ({
+    values,
+    isSubmitting,
+    setFieldValue,
+}) => {
     const [partyInfo, isLoading] = useDaDataParty(values?.inn, values?.opfType);
 
     useEffect(() => {
@@ -47,11 +51,7 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
                 />
             </Col>
             <Col span={ 10 }>
-                <DropFileField
-                    label="Скан ИНН"
-                    required={ true }
-                    disabled={ isSubmitting }
-                />
+                <DropFileField label="Скан ИНН" required={ true } disabled={ isSubmitting } />
             </Col>
             <Col span={ 7 }>
                 <DatePicker
@@ -72,11 +72,7 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
                 />
             </Col>
             <Col span={ 12 }>
-                <DropFileField
-                    label="Скан ОГРНИП"
-                    required={ true }
-                    disabled={ isSubmitting }
-                />
+                <DropFileField label="Скан ОГРНИП" required={ true } disabled={ isSubmitting } />
             </Col>
             <Col span={ 12 }>
                 <DropFileField
@@ -109,7 +105,11 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
     );
 };
 
-const OwnershipLegalFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>> = ({ values, isSubmitting, setFieldValue }) => {
+const OwnershipLegalFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>> = ({
+    values,
+    isSubmitting,
+    setFieldValue,
+}) => {
     const [partyInfo, isLoading] = useDaDataParty(values?.inn, values?.opfType);
 
     useEffect(() => {
@@ -133,11 +133,7 @@ const OwnershipLegalFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>>
                 />
             </Col>
             <Col span={ 10 }>
-                <DropFileField
-                    label="Скан ИНН"
-                    required={ true }
-                    disabled={ isSubmitting }
-                />
+                <DropFileField label="Скан ИНН" required={ true } disabled={ isSubmitting } />
             </Col>
             <Col span={ 7 }>
                 <DatePicker
@@ -176,11 +172,7 @@ const OwnershipLegalFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>>
                 />
             </Col>
             <Col span={ 10 }>
-                <DropFileField
-                    label="Скан ОГРН"
-                    required={ true }
-                    disabled={ isSubmitting }
-                />
+                <DropFileField label="Скан ОГРН" required={ true } disabled={ isSubmitting } />
             </Col>
         </Row>
     );
@@ -217,7 +209,8 @@ const OwnershipType: React.FC = () => {
                 enableReinitialize={ true }
                 initialValues={ convertToInitialValues(fields) }
                 onSubmit={ handleSubmit }
-                validationSchema={ ownershipTypeScheme }
+                validationSchema={ ownershipScheme }
+                validateOnBlur={ false }
             >
                 { (props) => (
                     <Form>
@@ -225,7 +218,7 @@ const OwnershipType: React.FC = () => {
                             <Col span={ 18 }>
                                 <SimpleSelect
                                     name="opfType"
-                                    label="Вид деятельности"
+                                    label="Вид деятельности "
                                     required={ true }
                                     disabled={ props.isSubmitting }
                                     options={ opfTypeOptions }
@@ -233,13 +226,15 @@ const OwnershipType: React.FC = () => {
                                 />
                             </Col>
                         </Row>
-                        { props.values.opfType === OpfType.INDIVIDUAL && <OwnershipIndividualFormFragment { ...props } /> }
-                        { props.values.opfType === OpfType.LEGAL && <OwnershipLegalFormFragment { ...props } /> }
+                        { props.values.opfType === OpfType.INDIVIDUAL && (
+                            <OwnershipIndividualFormFragment { ...props } />
+                        ) }
+                        { props.values.opfType === OpfType.LEGAL && (
+                            <OwnershipLegalFormFragment { ...props } />
+                        ) }
                         <ActionButtons
                             onReject={ () => handleReject(props.resetForm) }
                             isLoading={ props.isSubmitting }
-                            acceptText="Далее"
-                            rejectText="Назад"
                         />
                     </Form>
                 ) }

@@ -2,7 +2,7 @@ import { OpfType } from 'src/common/types/customer';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 import * as Yup from 'yup';
 
-export const ownershipTypeScheme = Yup.object<OwnershipTypeFieldModel>({
+export const ownershipScheme = Yup.object<OwnershipTypeFieldModel>({
     opfType: Yup.string().required('Выберите форму'),
     inn: Yup.string().when('opfType', {
         is: OpfType.INDIVIDUAL,

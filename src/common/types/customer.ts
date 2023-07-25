@@ -12,6 +12,7 @@ export interface CustomerInfo {
         birthPlace?: string;
         registration?: CustomerAddress;
         residential?: Omit<CustomerAddress, 'registrationDate'>;
+        addressMatches?: boolean;
         socials?: [];
     };
     legalInfo: {

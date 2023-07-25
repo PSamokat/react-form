@@ -65,7 +65,7 @@ export const useDaDataAddress: (
         bound?: DaDataGranularType,
     ) => void = useCallback(
         (value, country, fias, bound) => {
-            if (!value || value.length < 2) {
+            if (!value || value.length < 2 && bound !== DaDataGranularType.HOUSE) {
                 return;
             }
             getAddressRequest(value, country, fias, bound)

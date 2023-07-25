@@ -108,7 +108,7 @@ export interface DaDataAddress {
     city_with_type: Nullable<string>;
     country: string;
     country_iso_code: string;
-    fias_id: string;
+    fias_id: Nullable<string>;
     fias_level: string;
     flat: Nullable<string>;
     flat_area: Nullable<string>;

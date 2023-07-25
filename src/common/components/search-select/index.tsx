@@ -23,27 +23,6 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
     ...props
 }) => {
     const [field, meta, helper] = useField(name);
-    const handleOnChange = (value, option) => {
-        helper.setValue({
-            value,
-            dadataObj: option.title,
-        });
-    };
-
-    const handleOnSearch = (value) => {
-        if (value.length === 0) {
-            helper.setValue({
-                value: undefined,
-                dadataObj: {},
-            });
-
-            return;
-        }
-        helper.setValue({
-            value,
-            dadataObj: {},
-        });
-    };
 
     return (
         <div className="select">
@@ -57,13 +36,12 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
                 value={ field?.value?.value }
                 showSearch={ true }
                 showArrow={ false }
-                onSearch={ handleOnSearch }
                 notFoundContent={ isFetching ? <LoadingOutlined size={ 1 } /> : null }
                 status={ meta.error && meta.touched && 'error' }
-                onChange={ handleOnChange }
                 size="large"
                 className="select__field"
                 listHeight={ 150 }
+                onBlur={ () => helper.setTouched(true) }
             />
             <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
         </div>

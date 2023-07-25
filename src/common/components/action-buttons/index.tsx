@@ -6,8 +6,8 @@ import './action-buttons.scss';
 interface ActionButtonProps {
     rejectText?: string;
     acceptText?: string;
-    onAccept?: (value: unknown) => Promise<void>;
-    onReject?: (value: unknown) => unknown;
+    onAccept?: (e?) => void;
+    onReject?: (value?: unknown) => unknown;
     isLoading?: boolean;
 }
 const ActionButtons: React.FC<ActionButtonProps> = ({
@@ -20,7 +20,7 @@ const ActionButtons: React.FC<ActionButtonProps> = ({
     <div className="actions">
         <div className="actions__container">
             <Button className="actions__button reject" type="link" size="large" onClick={ onReject }>
-                { rejectText || 'Отмена' }
+                { rejectText || 'Назад' }
             </Button>
 
         </div>

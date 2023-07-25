@@ -3,8 +3,8 @@ import React from 'react';
 import './field-error.scss';
 
 interface FieldErrorProps {
-    visibility: boolean;
-    errorMessage: string;
+    visibility?: boolean;
+    errorMessage?: string;
 }
 
 const FieldError: React.FC<FieldErrorProps> = ({

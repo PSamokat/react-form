@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import omit from 'lodash/omit';
 import { CustomerInfo, ValidationStatus } from 'src/common/types/customer';
 import { GeneralInfoFieldsModel } from 'src/forms/general-info/form-model';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 import { RegistrationAddressFieldsModel } from 'Src/forms/registration-address/form-model';
+import { ResidentialAddressFieldsModel } from 'Src/forms/residential-address/form-model';
 
 const initialState: CustomerInfo = {
     personInfo: {
@@ -34,6 +36,7 @@ const initialState: CustomerInfo = {
             apartment: undefined,
             hasNoApartment: undefined,
         },
+        addressMatches: false,
     },
     legalInfo: {
         hasContract: false,
@@ -59,6 +62,12 @@ const formReducer = createSlice({
         },
         setRegistrationAddress(state: CustomerInfo, action: PayloadAction<RegistrationAddressFieldsModel>) {
             state.personInfo.registration = { ...action.payload, registrationDate: action.payload.registrationDate.valueOf() };
+        },
+        setResidentialAddress(state: CustomerInfo, action: PayloadAction<ResidentialAddressFieldsModel>) {
+            state.personInfo.residential = action.payload;
+        },
+        setAddressMatches(state: CustomerInfo) {
+            state.personInfo.residential = omit(state.personInfo.registration, 'registrationDate');
         },
     },
 });

@@ -23,15 +23,39 @@ import { generalInfoScheme } from './validation';
 
 import './general-info.scss';
 
-const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({ values, isSubmitting, resetForm }) => {
-    const [countrySuggestion, isCountriesLoading] = useDaDataCountries(
-        values.citizenship.value,
-    );
+const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({
+    values,
+    isSubmitting,
+    resetForm,
+    setFieldValue,
+}) => {
+    const [countrySuggestion, isCountriesLoading] = useDaDataCountries(values.citizenship?.value);
     const [citySuggestion, isCitiesLoading] = useDaDataAddress(
         values.city?.value,
         DaDataGranularType.CITY,
         values.citizenship?.value,
     );
+    const handleOnChangeValue = (fieldName, value, option) => {
+        setFieldValue(fieldName, {
+            value,
+            dadataObj: option.title,
+        });
+    };
+
+    const handleOnSearch = (fieldName, value) => {
+        if (value.length === 0) {
+            setFieldValue(fieldName, {
+                value: undefined,
+                dadataObj: {},
+            });
+
+            return;
+        }
+        setFieldValue(fieldName, {
+            value,
+            dadataObj: {},
+        });
+    };
 
     return (
         <Form>
@@ -72,6 +96,8 @@ const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({ va
                         placeholder="Город"
                         isFetching={ isCitiesLoading }
                         options={ citySuggestion }
+                        onSearch={ (value) => handleOnSearch('city', value) }
+                        onChange={ (value, option) => handleOnChangeValue('city', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -83,14 +109,13 @@ const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({ va
                         placeholder="Страна"
                         isFetching={ isCountriesLoading }
                         options={ countrySuggestion }
+                        onSearch={ (value) => handleOnSearch('citizenship', value) }
+                        onChange={ (value, option) =>
+                            handleOnChangeValue('citizenship', value, option) }
                     />
                 </Col>
                 <Col span={ 6 }>
-                    <GenderSwitch
-                        name="gender"
-                        required={ true }
-                        disabled={ isSubmitting }
-                    />
+                    <GenderSwitch name="gender" required={ true } disabled={ isSubmitting } />
                 </Col>
                 <Col span={ 6 }>
                     <DatePicker
@@ -110,12 +135,7 @@ const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({ va
                     />
                 </Col>
             </Row>
-            <ActionButtons
-                onReject={ resetForm }
-                isLoading={ isSubmitting }
-                acceptText="Далее"
-                rejectText="Отмена"
-            />
+            <ActionButtons onReject={ resetForm } isLoading={ isSubmitting } rejectText="Отмена" />
         </Form>
     );
 };
@@ -140,6 +160,7 @@ const GeneralInfo: React.FC = () => {
                 initialValues={ convertToInitialValues(fields) }
                 onSubmit={ handleSubmit }
                 validationSchema={ generalInfoScheme }
+                validateOnBlur={ false }
             >
                 { (props) => <GeneralFormFragment { ...props } /> }
             </Formik>

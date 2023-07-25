@@ -15,16 +15,19 @@ import { useDaDataAddress, useDaDataCountries } from 'src/common/hooks/dadata';
 import { DaDataGranularType } from 'src/common/types/dadata';
 import { convertToInitialValues } from 'src/forms/registration-address/converter';
 import { RegistrationAddressFieldsModel } from 'src/forms/registration-address/form-model';
+import { registrationAddressFieldsSchema } from 'src/forms/registration-address/validation';
 import { FormRoutes } from 'src/forms/route-to-component-relation';
 import { RootState } from 'src/store';
 import { formActions } from 'src/store/reducers/form';
 
 import './registration-address.scss';
 
-const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsModel>> = ({ values, isSubmitting }) => {
-    const [countrySuggestion, isCountriesLoading] = useDaDataCountries(
-        values.country.value,
-    );
+const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsModel>> = ({
+    values,
+    isSubmitting,
+    setFieldValue,
+}) => {
+    const [countrySuggestion, isCountriesLoading] = useDaDataCountries(values.country?.value);
     const [regionSuggestion, isRegionsLoading] = useDaDataAddress(
         values.region?.value,
         DaDataGranularType.REGION,
@@ -48,19 +51,42 @@ const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
         values.country?.value,
         values.street?.dadataObj.fias_id,
     );
+    const handleOnChangeValue = (fieldName, value, option) => {
+        setFieldValue(fieldName, {
+            value,
+            dadataObj: option.title,
+        });
+    };
+
+    const handleOnSearch = (fieldName, value) => {
+        if (value.length === 0) {
+            setFieldValue(fieldName, {
+                value: undefined,
+                dadataObj: {},
+            });
+
+            return;
+        }
+        setFieldValue(fieldName, {
+            value,
+            dadataObj: {},
+        });
+    };
 
     return (
         <Form>
             <Row gutter={ [30, 10] }>
                 <Col span={ 12 }>
                     <SearchSelect
-                        name="country "
+                        name="country"
                         label="Страна"
                         required={ true }
                         disabled={ isSubmitting }
                         placeholder="Страна регистрации"
                         isFetching={ isCountriesLoading }
                         options={ countrySuggestion }
+                        onSearch={ (value) => handleOnSearch('country', value) }
+                        onChange={ (value, option) => handleOnChangeValue('country', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -72,6 +98,8 @@ const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         placeholder="Регион"
                         isFetching={ isRegionsLoading }
                         options={ regionSuggestion }
+                        onSearch={ (value) => handleOnSearch('region', value) }
+                        onChange={ (value, option) => handleOnChangeValue('region', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -83,6 +111,8 @@ const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         placeholder="Город или населенный пункт"
                         isFetching={ isCitiesLoading }
                         options={ citySuggestion }
+                        onSearch={ (value) => handleOnSearch('city', value) }
+                        onChange={ (value, option) => handleOnChangeValue('city', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -94,6 +124,8 @@ const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         placeholder="Улица"
                         isFetching={ isStreetsLoading }
                         options={ streetSuggestion }
+                        onSearch={ (value) => handleOnSearch('street', value) }
+                        onChange={ (value, option) => handleOnChangeValue('street', value, option) }
                     />
                 </Col>
                 <Col span={ 3 }>
@@ -105,6 +137,8 @@ const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         placeholder={ 0 }
                         isFetching={ isHousesLoading }
                         options={ houseSuggestion }
+                        onSearch={ (value) => handleOnSearch('house', value) }
+                        onChange={ (value, option) => handleOnChangeValue('house', value, option) }
                     />
                 </Col>
                 <Col span={ 3 }>
@@ -139,7 +173,6 @@ const RegisrtationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                     />
                 </Col>
             </Row>
-            <ActionButtons />
         </Form>
     );
 };
@@ -153,6 +186,10 @@ const RegistrationAddress: React.FC = () => {
         await new Promise((resolve) => setTimeout(resolve, 800));
         navigate(FormRoutes.RESIDENTIAL);
     };
+    const handleReject: (props: FormikProps<RegistrationAddressFieldsModel>) => void = (props) => {
+        props.resetForm();
+        navigate(FormRoutes.OWNERSHIP);
+    };
 
     return (
         <div className="registration-address">
@@ -161,8 +198,22 @@ const RegistrationAddress: React.FC = () => {
                 title="Адрес регистрации"
                 description="Введите свой действующий адресс прописки"
             />
-            <Formik initialValues={ convertToInitialValues(fields) } onSubmit={ handleSubmit }>
-                { (props) => <RegisrtationFormFragment { ...props } /> }
+            <Formik
+                initialValues={ convertToInitialValues(fields) }
+                onSubmit={ handleSubmit }
+                validationSchema={ registrationAddressFieldsSchema }
+                validateOnBlur={ false }
+            >
+                { (props) => (
+                    <React.Fragment>
+                        <RegistrationFormFragment { ...props } />
+                        <ActionButtons
+                            onAccept={ props.handleSubmit }
+                            onReject={ () => handleReject(props) }
+                            isLoading={ props.isSubmitting }
+                        />
+                    </React.Fragment>
+                ) }
             </Formik>
         </div>
     );
