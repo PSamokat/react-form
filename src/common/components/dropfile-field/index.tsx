@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Accept, DropzoneOptions, useDropzone } from 'react-dropzone';
 import deleteIcon from 'src/common/assets/cross.svg';
 import uploadIcon from 'src/common/assets/upload.svg';
@@ -12,6 +12,8 @@ interface DropFileFieldProps extends DropzoneOptions {
     required?: boolean;
     disabled?: boolean;
     acceptedTypes?: AcceptedDocumentType[];
+    onDrop?: (acceptedFiles: File[]) => void;
+    onRemove?: () => void;
 }
 
 const DropFileField: React.FC<DropFileFieldProps> = ({
@@ -20,8 +22,11 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
     required,
     disabled,
     acceptedTypes = [],
+    onDrop,
+    onRemove,
     ...props
 }) => {
+    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const accept: Accept = useMemo(
         () =>
             acceptedTypes.reduce(
@@ -30,16 +35,25 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
             ),
         [acceptedTypes],
     );
+    const handleOnDrop: (files: File[]) => void = useCallback((files) => {
+        setUploadedFiles(files);
+        onDrop(files);
+    }, [onDrop]);
     const {
         getInputProps, getRootProps, open, isDragActive, acceptedFiles,
     } = useDropzone({
         noClick: true,
         accept: acceptedTypes.length > 0 ? accept : { 'image/*': [] },
+        onDrop: handleOnDrop,
         ...props,
     });
-    const removeFile = useCallback(
-        (file: File) => {
-            acceptedFiles.splice(acceptedFiles.indexOf(file), 1);
+
+    const removeFile: (indexToRemove: number) => void = useCallback(
+        (indexToRemove) => {
+            setUploadedFiles((prevFiles) =>
+                prevFiles.filter((_, index) => indexToRemove !== index));
+            acceptedFiles.splice(indexToRemove, 1);
+            onRemove();
         },
         [acceptedFiles],
     );
@@ -59,14 +73,14 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
             >
                 <input { ...getInputProps() } />
                 <div className="dropfile__content">
-                    { isDragActive || acceptedFiles.length > 0 ? (
-                        acceptedFiles.map((file) => (
-                            <div className="dropfile__content-droped" key={ file.name }>
+                    { isDragActive || uploadedFiles.length > 0 ? (
+                        uploadedFiles.map((file, index) => (
+                            <div className="dropfile__content-droped" key={ file.size }>
                                 <div className="dropfile__document">{ file.name }</div>
                                 <button
                                     type="button"
                                     className="dropfile__delete"
-                                    onClick={ () => removeFile(file) }
+                                    onClick={ () => removeFile(index) }
                                 >
                                     <img src={ deleteIcon } alt="del" />
                                 </button>

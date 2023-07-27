@@ -1,4 +1,4 @@
-import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'Src/common/types/dadata';
+import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'src/common/types/dadata';
 
 export interface CustomerInfo {
     personInfo: {
@@ -13,7 +13,7 @@ export interface CustomerInfo {
         registration?: CustomerAddress;
         residential?: Omit<CustomerAddress, 'registrationDate'>;
         addressMatches?: boolean;
-        socials?: [];
+        socials?: SocialInfo[];
     };
     legalInfo: {
         shortName?: string;
@@ -24,7 +24,7 @@ export interface CustomerInfo {
         registrationDate?: number;
         hasContract?: boolean;
     };
-    documentsValidationStatus: ValidationStatus;
+    uploadedDocuments: UploadedDocumentInfo[];
 }
 
 export interface CustomerAddress {
@@ -36,6 +36,11 @@ export interface CustomerAddress {
     apartment?: string;
     hasNoApartment?: boolean;
     registrationDate?: number;
+}
+
+export interface SocialInfo {
+    platformName: string;
+    url: string;
 }
 
 export enum Gender {
@@ -51,6 +56,10 @@ export enum ValidationStatus {
     VALID = 'valid',
     INVALID = 'invalid',
     NOT_STARTED = 'not_started',
+}
+export interface UploadedDocumentInfo {
+    fieldName: string;
+    file: File;
 }
 
 export interface DocumentTypeInfo {

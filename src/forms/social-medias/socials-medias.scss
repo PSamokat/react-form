@@ -1,0 +1,25 @@
+.social-medias {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 3;
+  &__fields {
+    max-height: 350px;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+  &__add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 215px;
+    padding: 7px 0;
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    &:hover > &-icon {
+      filter: invert(0%) sepia(85%) saturate(986%) hue-rotate(184deg) brightness(98%) contrast(126%);
+    }
+  }
+}

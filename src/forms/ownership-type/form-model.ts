@@ -1,5 +1,5 @@
 import { Dayjs } from 'dayjs';
-import { OpfType } from 'src/common/types/customer';
+import { OpfType, UploadedDocumentInfo } from 'src/common/types/customer';
 
 export interface OwnershipTypeFieldModel {
     opfType?: OpfType;
@@ -9,4 +9,5 @@ export interface OwnershipTypeFieldModel {
     hasContract?: boolean;
     fullName: string;
     shortName: string;
+    uploadedDocuments: UploadedDocumentInfo[];
 }

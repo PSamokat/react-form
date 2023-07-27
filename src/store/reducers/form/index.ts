@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import omit from 'lodash/omit';
-import { CustomerInfo, ValidationStatus } from 'src/common/types/customer';
+import { CustomerInfo } from 'src/common/types/customer';
 import { GeneralInfoFieldsModel } from 'src/forms/general-info/form-model';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 import { RegistrationAddressFieldsModel } from 'Src/forms/registration-address/form-model';
 import { ResidentialAddressFieldsModel } from 'Src/forms/residential-address/form-model';
+import { SocialMediasFieldsModel } from 'Src/forms/social-medias/form-model';
 
 const initialState: CustomerInfo = {
     personInfo: {
@@ -26,7 +27,10 @@ const initialState: CustomerInfo = {
             hasNoApartment: undefined,
             registrationDate: undefined,
         },
-        socials: undefined,
+        socials: [{
+            platformName: undefined,
+            url: undefined,
+        }],
         residential: {
             country: undefined,
             region: undefined,
@@ -47,7 +51,7 @@ const initialState: CustomerInfo = {
         fullName: undefined,
         shortName: undefined,
     },
-    documentsValidationStatus: ValidationStatus.NOT_STARTED,
+    uploadedDocuments: [],
 };
 
 const formReducer = createSlice({
@@ -69,6 +73,10 @@ const formReducer = createSlice({
         setAddressMatches(state: CustomerInfo) {
             state.personInfo.residential = omit(state.personInfo.registration, 'registrationDate');
         },
+        setSocialMedia(state: CustomerInfo, action: PayloadAction<SocialMediasFieldsModel>) {
+            state.personInfo.socials = action.payload.socials;
+        },
+        sendForm() {},
     },
 });
 
