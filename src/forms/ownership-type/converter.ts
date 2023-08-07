@@ -1,21 +1,46 @@
 import dayjs from 'dayjs';
+import omit from 'lodash/omit';
 import { CustomerInfo } from 'Src/common/types/customer';
 import { OwnershipTypeFieldModel } from 'Src/forms/ownership-type/form-model';
 
-export function convertToInitialValues(data: CustomerInfo): OwnershipTypeFieldModel {
+export const convertToInitialValues: (data: CustomerInfo) => OwnershipTypeFieldModel = (data) => {
     const { legalInfo, uploadedDocuments } = data;
     const {
         inn, ogrn, opfType, registrationDate, hasContract, fullName, shortName,
     } = legalInfo;
+    const {
+        inn: scanInn,
+        egrn: scanEgrn,
+        contract: scanContract,
+        ogrn: scanOgrn,
+    } = uploadedDocuments;
 
     return {
         inn,
         ogrn,
         opfType,
-        registrationDate: dayjs(registrationDate),
+        registrationDate: registrationDate ? dayjs(registrationDate) : null,
         hasContract,
         fullName,
         shortName,
-        uploadedDocuments,
+        scanInn,
+        scanOgrn,
+        scanContract,
+        scanEgrn,
     };
-}
+};
+
+export const convertToStoreValue: (data: OwnershipTypeFieldModel) => Partial<CustomerInfo> = (
+    data,
+) => ({
+    uploadedDocuments: {
+        inn: data.scanInn,
+        ogrn: data.scanOgrn,
+        egrn: data.scanEgrn,
+        contract: data.scanContract,
+    },
+    legalInfo: {
+        ...omit(data, ['scanInn', 'scanOgrn', 'scanEgrn', 'scanContract']),
+        registrationDate: data.registrationDate.valueOf(),
+    },
+});

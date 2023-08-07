@@ -1,16 +1,20 @@
-import { dadataAddressScheme, dadataCountryScheme } from 'src/common/validation/yup';
-import * as Yup from 'yup';
+import { SchemaObject } from 'src/common/types/common';
+import { dadataAddressScheme, dadataCountryScheme } from 'src/common/utils/yup';
+import { RegistrationAddressFieldsModel } from 'src/forms/registration-address/form-model';
+import {
+    boolean, date, object, string,
+} from 'yup';
 
-export const registrationAddressFieldsSchema = Yup.object({
+export const registrationAddressFieldsSchema = object().shape<SchemaObject<RegistrationAddressFieldsModel>>({
     country: dadataCountryScheme(),
     region: dadataAddressScheme(),
     city: dadataAddressScheme(),
     street: dadataAddressScheme(),
     house: dadataAddressScheme(),
-    apartment: Yup.string().when('hasNoApartment', {
+    apartment: string().when('hasNoApartment', {
         is: true,
         then: (schema) => schema.required('Заполните поле'),
     }),
-    registrationDate: Yup.date().required('Обязательное поле'),
-    hasNoApartment: Yup.boolean(),
+    registrationDate: date().required('Обязательное поле'),
+    hasNoApartment: boolean(),
 });

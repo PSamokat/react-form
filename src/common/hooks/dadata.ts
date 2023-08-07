@@ -27,7 +27,6 @@ export const useDaDataCountries: (
             .then((response) => setData(response.data.suggestions))
             .catch((reason) => console.log(reason.response));
     }, []);
-
     const debouncedSearch = useDebouncedCallback(search, 800);
 
     useEffect(() => {

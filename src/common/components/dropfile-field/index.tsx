@@ -1,8 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+    useCallback, useEffect, useMemo,
+} from 'react';
 import { Accept, DropzoneOptions, useDropzone } from 'react-dropzone';
+import { useField, useFormikContext } from 'formik';
 import deleteIcon from 'src/common/assets/cross.svg';
 import uploadIcon from 'src/common/assets/upload.svg';
-import { AcceptedDocumentType, getDocumentTypeInfo } from 'src/common/types/customer';
+import FieldError from 'src/common/components/field-error';
+import { AcceptedDocumentType, getDocumentTypeInfo } from 'src/common/types/common';
+import { formatSize } from 'src/common/utils/common';
 
 import './dropfile-field.scss';
 
@@ -12,21 +17,18 @@ interface DropFileFieldProps extends DropzoneOptions {
     required?: boolean;
     disabled?: boolean;
     acceptedTypes?: AcceptedDocumentType[];
-    onDrop?: (acceptedFiles: File[]) => void;
-    onRemove?: () => void;
 }
 
 const DropFileField: React.FC<DropFileFieldProps> = ({
     name,
     label,
-    required,
     disabled,
+    required,
     acceptedTypes = [],
-    onDrop,
-    onRemove,
     ...props
 }) => {
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+    const formContext = useFormikContext();
+    const [field, meta, helper] = useField<File[]>(name);
     const accept: Accept = useMemo(
         () =>
             acceptedTypes.reduce(
@@ -35,28 +37,38 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
             ),
         [acceptedTypes],
     );
-    const handleOnDrop: (files: File[]) => void = useCallback((files) => {
-        setUploadedFiles(files);
-        onDrop(files);
-    }, [onDrop]);
+
     const {
         getInputProps, getRootProps, open, isDragActive, acceptedFiles,
     } = useDropzone({
         noClick: true,
+        disabled,
         accept: acceptedTypes.length > 0 ? accept : { 'image/*': [] },
-        onDrop: handleOnDrop,
         ...props,
     });
 
     const removeFile: (indexToRemove: number) => void = useCallback(
         (indexToRemove) => {
-            setUploadedFiles((prevFiles) =>
-                prevFiles.filter((_, index) => indexToRemove !== index));
+            if (disabled) {
+                return;
+            }
+            helper.setValue(field.value.filter((_, index) => indexToRemove !== index));
             acceptedFiles.splice(indexToRemove, 1);
-            onRemove();
         },
-        [acceptedFiles],
+        [acceptedFiles, field.value],
     );
+
+    useEffect(() => {
+        helper.setValue([...acceptedFiles]);
+    }, [acceptedFiles]);
+
+    useEffect(() => {
+        if (formContext.values?.[name]) {
+            helper.setValue([...formContext.values[name]]);
+        }
+    }, []);
+
+    const isError = meta.error && meta.touched;
 
     return (
         <div className="dropfile">
@@ -66,17 +78,24 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
             </div>
 
             <div
-                className={ `dropfile__field${isDragActive ? ' active' : ''}${
-                    disabled ? ' disabled' : ''
-                }` }
+                className={ `dropfile__field
+                    ${isDragActive ? ' active' : ''}
+                    ${disabled ? ' disabled' : ''}
+                    ${isError ? ' error' : ''}` }
                 { ...getRootProps() }
             >
                 <input { ...getInputProps() } />
                 <div className="dropfile__content">
-                    { isDragActive || uploadedFiles.length > 0 ? (
-                        uploadedFiles.map((file, index) => (
+                    { isDragActive || field?.value?.length > 0 ? (
+                        field?.value?.map((file, index) => (
                             <div className="dropfile__content-droped" key={ file.size }>
-                                <div className="dropfile__document">{ file.name }</div>
+                                <div className="dropfile__document">
+                                    <div className="dropfile__document-status">✓</div>
+                                    <div className="dropfile__document-name">{ file.name }</div>
+                                    <div className="dropfile__document-size">
+                                        { formatSize(file.size) }
+                                    </div>
+                                </div>
                                 <button
                                     type="button"
                                     className="dropfile__delete"
@@ -100,6 +119,7 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
                     ) }
                 </div>
             </div>
+            { isError && <FieldError errorMessage={ meta.error } /> }
         </div>
     );
 };

@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import omit from 'lodash/omit';
 import { CustomerInfo } from 'src/common/types/customer';
 import { GeneralInfoFieldsModel } from 'src/forms/general-info/form-model';
-import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 import { RegistrationAddressFieldsModel } from 'Src/forms/registration-address/form-model';
 import { ResidentialAddressFieldsModel } from 'Src/forms/residential-address/form-model';
 import { SocialMediasFieldsModel } from 'Src/forms/social-medias/form-model';
@@ -51,7 +50,12 @@ const initialState: CustomerInfo = {
         fullName: undefined,
         shortName: undefined,
     },
-    uploadedDocuments: [],
+    uploadedDocuments: {
+        inn: undefined,
+        contract: undefined,
+        ogrn: undefined,
+        egrn: undefined,
+    },
 };
 
 const formReducer = createSlice({
@@ -61,8 +65,9 @@ const formReducer = createSlice({
         setGeneralInfo(state: CustomerInfo, action: PayloadAction<GeneralInfoFieldsModel>) {
             state.personInfo = { ...action.payload, birthDate: action.payload.birthDate.valueOf() };
         },
-        setOwnershipInfo(state: CustomerInfo, action: PayloadAction<OwnershipTypeFieldModel>) {
-            state.legalInfo = { ...action.payload, registrationDate: action.payload.registrationDate.valueOf() };
+        setOwnershipInfo(state: CustomerInfo, action: PayloadAction<Partial<CustomerInfo>>) {
+            state.legalInfo = action.payload.legalInfo;
+            state.uploadedDocuments = action.payload.uploadedDocuments;
         },
         setRegistrationAddress(state: CustomerInfo, action: PayloadAction<RegistrationAddressFieldsModel>) {
             state.personInfo.registration = { ...action.payload, registrationDate: action.payload.registrationDate.valueOf() };

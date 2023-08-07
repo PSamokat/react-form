@@ -75,7 +75,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
 
     return (
         <Form>
-            <Row gutter={ [30, 10] }>
+            <Row gutter={ [30, 15] }>
                 <Col span={ 24 }>
                     <Field name="addressMatches">
                         { ({ field }) => (

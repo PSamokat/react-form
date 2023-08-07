@@ -1,13 +1,16 @@
 import { Dayjs } from 'dayjs';
-import { OpfType, UploadedDocumentInfo } from 'src/common/types/customer';
+import { OpfType } from 'src/common/types/customer';
 
 export interface OwnershipTypeFieldModel {
-    opfType?: OpfType;
+    opfType: OpfType;
     inn: string;
-    ogrn?: string;
-    registrationDate?: Dayjs;
-    hasContract?: boolean;
+    ogrn: string;
+    registrationDate: Dayjs;
+    hasContract: boolean;
     fullName: string;
     shortName: string;
-    uploadedDocuments: UploadedDocumentInfo[];
+    scanInn: File[];
+    scanOgrn: File[];
+    scanContract: File[];
+    scanEgrn: File[];
 }

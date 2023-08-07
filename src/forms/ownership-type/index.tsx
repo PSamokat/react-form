@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Checkbox, Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import {
-    Field, FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps,
+    Field, Form, Formik, FormikProps,
 } from 'formik';
 import { DefaultOptionType } from 'rc-select/lib/Select';
 import legalIcon from 'src/common/assets/legal.svg';
@@ -16,7 +16,7 @@ import SimpleField from 'src/common/components/simple-field';
 import SimpleSelect from 'src/common/components/simple-select';
 import { useDaDataParty } from 'src/common/hooks/dadata';
 import { OpfType } from 'src/common/types/customer';
-import { convertToInitialValues } from 'src/forms/ownership-type/converter';
+import { convertToInitialValues, convertToStoreValue } from 'src/forms/ownership-type/converter';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
 import { ownershipScheme } from 'src/forms/ownership-type/validation';
 import { FormRoutes } from 'src/forms/route-to-component-relation';
@@ -36,121 +36,87 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
         setFieldValue('registrationDate', dayjs(partyInfo?.data.state.registration_date));
         setFieldValue('ogrn', partyInfo?.data.ogrn);
     }, [partyInfo]);
-    const handleOnDrop: (
-        acceptedFiles: File[],
-        arrayHelper: FieldArrayRenderProps,
-        fieldName: string
-    ) => void = (acceptedFiles, arrayHelper, fieldName) => {
-        acceptedFiles.forEach((file) => {
-            arrayHelper.push({
-                fieldName,
-                documentName: file.name,
-                size: file.size,
-            });
-        });
-    };
-    const handleOnRemove: (fieldNameToRemove: string) => void = (fieldNameToRemove) => {
-        setFieldValue(
-            'uploadedDocuments',
-            values.uploadedDocuments.filter((document) => document.fieldName !== fieldNameToRemove),
-        );
-    };
 
     return (
-        <Row gutter={ [30, 10] }>
-            <FieldArray name="uploadedDocuments">
-                { (arrayHelper) => (
-                    <React.Fragment>
-                        <Col span={ 7 }>
-                            <SimpleField
-                                name="inn"
-                                label="ИНН"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                placeholder="хххххххххх"
-                                maxLength={ 12 }
-                                isLoading={ isLoading }
-                            />
-                        </Col>
-                        <Col span={ 10 }>
-                            <DropFileField
-                                label="Скан ИНН"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                multiple={ false }
-                                onDrop={ (acceptedFiles) =>
-                                    handleOnDrop(acceptedFiles, arrayHelper, 'scan_inn') }
-                                onRemove={ () => handleOnRemove('scan_ogrn') }
-                            />
-                        </Col>
-                        <Col span={ 7 }>
-                            <DatePicker
-                                name="registrationDate"
-                                label="Дата регистрации"
-                                required={ true }
-                                disabled={ isSubmitting }
-                            />
-                        </Col>
-                        <Col span={ 12 }>
-                            <SimpleField
-                                name="ogrn"
-                                label="ОГРНИП"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                placeholder="ххххххххххххххх"
-                                maxLength={ 15 }
-                            />
-                        </Col>
-                        <Col span={ 12 }>
-                            <DropFileField
-                                name="scan_ogrn"
-                                label="Скан ОГРНИП"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                multiple={ false }
-                                onDrop={ (acceptedFiles) =>
-                                    handleOnDrop(acceptedFiles, arrayHelper, 'scan_ogrn') }
-                                onRemove={ () => handleOnRemove('scan_ogrn') }
-                            />
-                        </Col>
-                        <Col span={ 12 }>
-                            <DropFileField
-                                label="Скан договора аренды помещения (офиса)"
-                                disabled={ values.hasContract || isSubmitting }
-                                multiple={ false }
-                                onDrop={ (acceptedFiles) =>
-                                    handleOnDrop(acceptedFiles, arrayHelper, 'scan_contract') }
-                                onRemove={ () => handleOnRemove('scan_ogrn') }
-                            />
-                        </Col>
-                        <Col span={ 12 }>
-                            <DropFileField
-                                label="Скан выписки из ЕГРИП (не старше 3 месяцев)"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                multiple={ false }
-                                onDrop={ (acceptedFiles) =>
-                                    handleOnDrop(acceptedFiles, arrayHelper, 'scan_egrn') }
-                                onRemove={ () => handleOnRemove('scan_ogrn') }
-                            />
-                        </Col>
-                        <Col>
-                            <Field name="hasContract">
-                                { ({ field }) => (
-                                    <Checkbox
-                                        { ...field }
-                                        checked={ field.value }
-                                        className="ownership__checkbox"
-                                        disabled={ isSubmitting }
-                                    >
-                                        Нет договора
-                                    </Checkbox>
-                                ) }
-                            </Field>
-                        </Col>
-                    </React.Fragment>
-                ) }
-            </FieldArray>
+        <Row gutter={ [30, 15] }>
+            <Col span={ 7 }>
+                <SimpleField
+                    name="inn"
+                    label="ИНН"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    placeholder="хххххххххх"
+                    maxLength={ 12 }
+                    isLoading={ isLoading }
+                />
+            </Col>
+            <Col span={ 10 }>
+                <DropFileField
+                    name="scanInn"
+                    label="Скан ИНН"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    multiple={ true }
+                />
+            </Col>
+            <Col span={ 7 }>
+                <DatePicker
+                    name="registrationDate"
+                    label="Дата регистрации"
+                    required={ true }
+                    disabled={ isSubmitting }
+                />
+            </Col>
+            <Col span={ 12 }>
+                <SimpleField
+                    name="ogrn"
+                    label="ОГРНИП"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    placeholder="ххххххххххххххх"
+                    maxLength={ 15 }
+                />
+            </Col>
+            <Col span={ 12 }>
+                <DropFileField
+                    name="scanOgrn"
+                    label="Скан ОГРНИП"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    multiple={ false }
+                />
+            </Col>
+            <Col span={ 12 }>
+                <DropFileField
+                    name="scanContract"
+                    label="Скан договора аренды помещения (офиса)"
+                    disabled={ values.hasContract || isSubmitting }
+                    multiple={ true }
+                />
+            </Col>
+            <Col span={ 12 }>
+                <DropFileField
+                    name="scanEgrn"
+                    label="Скан выписки из ЕГРИП (не старше 3 месяцев)"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    multiple={ true }
+                />
+            </Col>
+            <Col>
+                <Field name="hasContract">
+                    { ({ field }) => (
+                        <Checkbox
+                            { ...field }
+                            checked={ field.value }
+                            className="ownership__checkbox"
+                            disabled={ isSubmitting }
+                        >
+                            Нет договора
+                        </Checkbox>
+                    ) }
+                </Field>
+            </Col>
         </Row>
     );
 };
@@ -169,103 +135,72 @@ const OwnershipLegalFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>>
         setFieldValue('ogrn', partyInfo?.data.ogrn);
     }, [partyInfo]);
 
-    const handleOnDrop: (
-        acceptedFiles: File[],
-        arrayHelper: FieldArrayRenderProps,
-        fieldName: string
-    ) => void = (acceptedFiles, arrayHelper, fieldName) => {
-        acceptedFiles.forEach((file) => {
-            arrayHelper.push({
-                fieldName,
-                file,
-            });
-        });
-    };
-    const handleOnRemove: (fieldNameToRemove: string) => void = (fieldNameToRemove) => {
-        setFieldValue(
-            'uploadedDocuments',
-            values.uploadedDocuments.filter((document) => document.fieldName !== fieldNameToRemove),
-        );
-    };
-
     return (
-        <Row gutter={ [30, 10] }>
-            <FieldArray name="uploadedDocuments">
-                { (arrayHelper) => (
-                    <React.Fragment>
-                        <Col span={ 7 }>
-                            <SimpleField
-                                name="inn"
-                                label="ИНН"
-                                placeholder="хххххххххх"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                isLoading={ isLoading }
-                                maxLength={ 10 }
-                            />
-                        </Col>
-                        <Col span={ 10 }>
-                            <DropFileField
-                                name="scan_inn"
-                                label="Скан ИНН"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                multiple={ false }
-                                onDrop={ (acceptedFiles) =>
-                                    handleOnDrop(acceptedFiles, arrayHelper, 'scan_inn') }
-                                onRemove={ () => handleOnRemove('scan_inn') }
-                            />
-                        </Col>
-                        <Col span={ 7 }>
-                            <DatePicker
-                                name="registrationDate"
-                                label="Дата регистрации"
-                                required={ true }
-                                disabled={ isSubmitting }
-                            />
-                        </Col>
-                        <Col span={ 16 }>
-                            <SimpleField
-                                name="fullName"
-                                label="Название полное"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                placeholder="ООО «Московская промышленная компания»"
-                            />
-                        </Col>
-                        <Col span={ 8 }>
-                            <SimpleField
-                                name="shortName"
-                                label="Сокращение"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                placeholder="ООО «МПК»"
-                            />
-                        </Col>
-                        <Col span={ 7 }>
-                            <SimpleField
-                                name="ogrn"
-                                label="ОГРН"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                placeholder="ххххххххххххх"
-                                maxLength={ 13 }
-                            />
-                        </Col>
-                        <Col span={ 10 }>
-                            <DropFileField
-                                label="Скан ОГРН"
-                                required={ true }
-                                disabled={ isSubmitting }
-                                multiple={ false }
-                                onDrop={ (acceptedFiles) =>
-                                    handleOnDrop(acceptedFiles, arrayHelper, 'scan_ogrn') }
-                                onRemove={ () => handleOnRemove('scan_ogrn') }
-                            />
-                        </Col>
-                    </React.Fragment>
-                ) }
-            </FieldArray>
+        <Row gutter={ [30, 15] }>
+            <Col span={ 7 }>
+                <SimpleField
+                    name="inn"
+                    label="ИНН"
+                    placeholder="хххххххххх"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    isLoading={ isLoading }
+                    maxLength={ 10 }
+                />
+            </Col>
+            <Col span={ 10 }>
+                <DropFileField
+                    name="scanInn"
+                    label="Скан ИНН"
+                    multiple={ true }
+                    disabled={ isSubmitting }
+                    required={ true }
+                />
+            </Col>
+            <Col span={ 7 }>
+                <DatePicker
+                    name="registrationDate"
+                    label="Дата регистрации"
+                    required={ true }
+                    disabled={ isSubmitting }
+                />
+            </Col>
+            <Col span={ 16 }>
+                <SimpleField
+                    name="fullName"
+                    label="Название полное"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    placeholder="ООО «Московская промышленная компания»"
+                />
+            </Col>
+            <Col span={ 8 }>
+                <SimpleField
+                    name="shortName"
+                    label="Сокращение"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    placeholder="ООО «МПК»"
+                />
+            </Col>
+            <Col span={ 7 }>
+                <SimpleField
+                    name="ogrn"
+                    label="ОГРН"
+                    disabled={ isSubmitting }
+                    placeholder="ххххххххххххх"
+                    maxLength={ 13 }
+                />
+            </Col>
+            <Col span={ 10 }>
+                <DropFileField
+                    name="scanOgrn"
+                    label="Скан ОГРН"
+                    required={ true }
+                    disabled={ isSubmitting }
+                    multiple={ true }
+                />
+            </Col>
         </Row>
     );
 };
@@ -278,9 +213,8 @@ const OwnershipType: React.FC = () => {
         { value: OpfType.LEGAL, label: 'Общество с ограниченной ответственностью (ООО)' },
         { value: OpfType.INDIVIDUAL, label: 'Индивидуальный предприниматель (ИП)' },
     ];
-
     const handleSubmit = async (data: OwnershipTypeFieldModel): Promise<void> => {
-        dispatch(formActions.setOwnershipInfo(data));
+        dispatch(formActions.setOwnershipInfo(convertToStoreValue(data)));
         await new Promise((resolve) => setTimeout(resolve, 800));
         navigate(FormRoutes.REGISTRATION);
     };
@@ -306,7 +240,7 @@ const OwnershipType: React.FC = () => {
             >
                 { (props) => (
                     <Form>
-                        <Row>
+                        <Row className="ownership__opf">
                             <Col span={ 18 }>
                                 <SimpleSelect
                                     name="opfType"

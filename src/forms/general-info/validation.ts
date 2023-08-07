@@ -1,15 +1,19 @@
+import { SchemaObject } from 'src/common/types/common';
 import { Gender } from 'src/common/types/customer';
-import * as Yup from 'yup';
+import { dadataAddressScheme, dadataCountryScheme } from 'src/common/utils/yup';
+import {
+    date, mixed, object, string,
+} from 'yup';
 
 import type { GeneralInfoFieldsModel } from './form-model';
 
-export const generalInfoScheme = Yup.object<GeneralInfoFieldsModel>({
-    firstName: Yup.string().required('Обязательное поле'),
-    surName: Yup.string().required('Обязательное поле'),
-    lastName: Yup.string().required('Обязательное поле'),
-    city: Yup.string().required('Обязательное поле'),
-    citizenship: Yup.string().required('Обязательное поле'),
-    birthDate: Yup.date().required('Обязательное поле'),
-    birthPlace: Yup.string().required('Обязательное поле'),
-    gender: Yup.mixed<Gender>().oneOf(Object.values(Gender)).required('Укажите пол'),
+export const generalInfoScheme = object().shape<SchemaObject<GeneralInfoFieldsModel>>({
+    firstName: string().required('Обязательное поле'),
+    surName: string().required('Обязательное поле'),
+    lastName: string().required('Обязательное поле'),
+    city: dadataAddressScheme(),
+    citizenship: dadataCountryScheme(),
+    birthDate: date().required('Обязательное поле'),
+    birthPlace: string().required('Обязательное поле'),
+    gender: mixed<Gender>().oneOf(Object.values(Gender)).required('Укажите пол'),
 });

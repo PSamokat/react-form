@@ -75,7 +75,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
 
     return (
         <Form>
-            <Row gutter={ [30, 10] }>
+            <Row gutter={ [30, 15] }>
                 <Col span={ 12 }>
                     <SearchSelect
                         name="country"

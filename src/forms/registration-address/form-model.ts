@@ -1,5 +1,6 @@
 import { Dayjs } from 'dayjs';
-import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'src/common/types/dadata';
+import { FieldWithDaData } from 'Src/common/types/common';
+import { DaDataAddress, DaDataCountries } from 'src/common/types/dadata';
 
 export interface RegistrationAddressFieldsModel {
     country?: FieldWithDaData<DaDataCountries>;

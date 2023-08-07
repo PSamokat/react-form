@@ -21,6 +21,8 @@ const SimpleSelect: React.FC<SimpleInputProps> = ({
         helper.setValue(value);
     };
 
+    const isError = meta.error && meta.touched;
+
     return (
         <div className="select">
             <div className="select__label">
@@ -36,7 +38,7 @@ const SimpleSelect: React.FC<SimpleInputProps> = ({
                 size="large"
                 className="select__field"
             />
-            <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
+            { isError && (<FieldError errorMessage={ meta.error } />) }
         </div>
     );
 };

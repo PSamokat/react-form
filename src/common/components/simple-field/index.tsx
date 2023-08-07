@@ -6,7 +6,7 @@ import FieldError from 'src/common/components/field-error';
 
 import './simple-field.scss';
 
-interface SimpleInputProps extends InputProps{
+interface SimpleInputProps extends InputProps {
     name?: string;
     label?: string;
     disabled?: boolean;
@@ -23,6 +23,8 @@ const SimpleField: React.FC<SimpleInputProps> = ({
 }) => {
     const [field, meta] = useField(name);
 
+    const isError = meta.error && meta.touched;
+
     return (
         <React.Fragment>
             <div className="field__label">
@@ -37,7 +39,7 @@ const SimpleField: React.FC<SimpleInputProps> = ({
                 size="large"
                 addonAfter={ isLoading && <LoadingOutlined /> }
             />
-            <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
+            { isError && <FieldError errorMessage={ meta.error } /> }
         </React.Fragment>
     );
 };

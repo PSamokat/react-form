@@ -21,6 +21,8 @@ const SimpleDatePicker: React.FC<SimpleDatePickerProps> = ({
 
     const dateFormat = 'DD.MM.YYYY';
 
+    const isError = meta.error && meta.touched;
+
     return (
         <div className="date-picker">
             <div className="date-picker__label">
@@ -31,13 +33,13 @@ const SimpleDatePicker: React.FC<SimpleDatePickerProps> = ({
                 { ...field }
                 onChange={ handleOnChange }
                 { ...props }
-                status={ meta.error && meta.touched && 'error' }
+                status={ meta.error && meta.touched ? 'error' : '' }
                 format={ dateFormat }
                 size="large"
                 placeholder="Дата"
                 className="date-picker__picker"
             />
-            <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
+            { isError && <FieldError errorMessage={ meta.error } /> }
         </div>
     );
 };

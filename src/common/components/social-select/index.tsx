@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
     Input, InputProps, Select, SelectProps,
 } from 'antd';
@@ -43,11 +43,8 @@ const SocialSelect: React.FC<SocialSelectProps> = ({
     const handleSelectOnChange = (value) => {
         selectHelper.setValue(value);
     };
-
-    useEffect(() => {
-        console.log(selectMeta.error && selectMeta.touched ? 'SelectErr' : 'SelectValid', selectMeta.error, selectMeta.touched, selectField.name);
-        console.log(inputMeta.error && inputMeta.touched ? 'InputErr' : 'InputValid', inputMeta.error, inputMeta.touched, inputField.name);
-    }, [selectMeta.error, inputMeta.error, inputMeta.touched, selectMeta.touched]);
+    const isSelectError = selectMeta.error && selectMeta.touched;
+    const isInputError = inputMeta.error && inputMeta.touched;
 
     return (
         <div className="social-select">
@@ -87,13 +84,9 @@ const SocialSelect: React.FC<SocialSelectProps> = ({
                     </button>
                 ) }
             </div>
-            <FieldError
-                visibility={
-                    (selectMeta.error && selectMeta.touched) ||
-                    (inputMeta.error && inputMeta.touched)
-                }
-                errorMessage={ `${inputMeta.error || ''}\n${selectMeta.error || ''}` }
-            />
+            { (isSelectError || isInputError) && (
+                <FieldError errorMessage={ `${inputMeta.error || ''}\n${selectMeta.error || ''}` } />
+            ) }
         </div>
     );
 };

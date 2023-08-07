@@ -19,6 +19,8 @@ const GenderSwitch: React.FC<GenderSwitchProps> = ({ name, required = false, dis
         helper.setValue(value);
     };
 
+    const isError = meta.error && meta.touched;
+
     return (
         <div className="switch">
             <div className="switch__label">
@@ -53,7 +55,7 @@ const GenderSwitch: React.FC<GenderSwitchProps> = ({ name, required = false, dis
                     </div>
                 </button>
             </div>
-            <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
+            { isError && <FieldError errorMessage={ meta.error } /> }
         </div>
     );
 };

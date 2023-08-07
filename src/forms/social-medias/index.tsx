@@ -68,17 +68,15 @@ const SocialMedias: React.FC = () => {
                                             />
                                         )) }
                                     </div>
-                                    <FieldError
-                                        visibility={ typeof errors.socials === 'string' }
-                                        errorMessage={
-                                            typeof errors.socials === 'string' && errors.socials
-                                        }
-                                    />
+                                    { typeof errors.socials === 'string' && (
+                                        <FieldError errorMessage={ errors.socials } />
+                                    ) }
                                     <Button
                                         type="link"
                                         className="social-medias__add"
                                         disabled={ isSubmitting }
-                                        onClick={ () => arrayHelper.push({ name: undefined, url: undefined }) }
+                                        onClick={ () =>
+                                            arrayHelper.push({ name: undefined, url: undefined }) }
                                     >
                                         <img
                                             className="social-medias__add-icon"

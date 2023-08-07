@@ -1,30 +1,32 @@
-import { dadataAddressScheme, dadataCountryScheme } from 'src/common/validation/yup';
-import * as Yup from 'yup';
+import { SchemaObject } from 'src/common/types/common';
+import { dadataAddressScheme, dadataCountryScheme } from 'src/common/utils/yup';
+import { ResidentialAddressFieldsModel } from 'src/forms/residential-address/form-model';
+import { boolean, object, string } from 'yup';
 
-export const residentialAddressFieldsSchema = Yup.object({
-    country: Yup.object().when('addressMatches', {
+export const residentialAddressFieldsSchema = object().shape<SchemaObject<ResidentialAddressFieldsModel>>({
+    country: object().when('addressMatches', {
         is: false,
         then: () => dadataCountryScheme(),
     }),
-    region: Yup.object().when('addressMatches', {
+    region: object().when('addressMatches', {
         is: false,
         then: () => dadataAddressScheme(),
     }),
-    city: Yup.object().when('addressMatches', {
+    city: object().when('addressMatches', {
         is: false,
         then: () => dadataAddressScheme(),
     }),
-    street: Yup.object().when('addressMatches', {
+    street: object().when('addressMatches', {
         is: false,
         then: () => dadataAddressScheme(),
     }),
-    house: Yup.object().when('addressMatches', {
+    house: object().when('addressMatches', {
         is: false,
         then: () => dadataAddressScheme(),
     }),
-    apartment: Yup.string().when(['addressMatches', 'hasNoApartment'], {
+    apartment: string().when(['addressMatches', 'hasNoApartment'], {
         is: (addressMatches, hasNoApartment) => !addressMatches && !hasNoApartment,
         then: (schema) => schema.required('Заполните поле'),
     }),
-    hasNoApartment: Yup.boolean(),
+    hasNoApartment: boolean(),
 });

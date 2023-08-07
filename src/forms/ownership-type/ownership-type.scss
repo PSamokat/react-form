@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   flex-grow: 3;
+  &__opf {
+    margin-bottom: 40px;
+  }
   &__checkbox {
     margin-top: 10px;
     color: #808080;

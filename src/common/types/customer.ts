@@ -1,4 +1,5 @@
-import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'src/common/types/dadata';
+import { FieldWithDaData } from 'src/common/types/common';
+import { DaDataAddress, DaDataCountries } from 'src/common/types/dadata';
 
 export interface CustomerInfo {
     personInfo: {
@@ -24,7 +25,7 @@ export interface CustomerInfo {
         registrationDate?: number;
         hasContract?: boolean;
     };
-    uploadedDocuments: UploadedDocumentInfo[];
+    uploadedDocuments: CustomerDocuments;
 }
 
 export interface CustomerAddress {
@@ -38,9 +39,17 @@ export interface CustomerAddress {
     registrationDate?: number;
 }
 
+export type CustomerDocuments = Partial<Record<RegistrationDocuments, File[]>>;
+
 export interface SocialInfo {
-    platformName: string;
-    url: string;
+    platformName?: string;
+    url?: string;
+}
+export enum RegistrationDocuments {
+    INN = 'inn',
+    OGRN = 'ogrn',
+    EGRN = 'egrn',
+    CONTRACT = 'contract',
 }
 
 export enum Gender {
@@ -51,38 +60,4 @@ export enum Gender {
 export enum OpfType {
     INDIVIDUAL = 'INDIVIDUAL',
     LEGAL = 'LEGAL',
-}
-export enum ValidationStatus {
-    VALID = 'valid',
-    INVALID = 'invalid',
-    NOT_STARTED = 'not_started',
-}
-export interface UploadedDocumentInfo {
-    fieldName: string;
-    file: File;
-}
-
-export interface DocumentTypeInfo {
-    code: string;
-    name: string;
-}
-export enum AcceptedDocumentType {
-    PDF,
-    JPEG,
-    BMP,
-    PNG,
-}
-export function getDocumentTypeInfo(type: AcceptedDocumentType): DocumentTypeInfo {
-    switch (type) {
-        case AcceptedDocumentType.BMP:
-            return { name: '.bmp', code: 'image/bmp' };
-        case AcceptedDocumentType.JPEG:
-            return { name: '.jpeg', code: 'image/jpeg' };
-        case AcceptedDocumentType.PDF:
-            return { name: '.pdf', code: 'application/pdf' };
-        case AcceptedDocumentType.PNG:
-            return { name: '.png', code: 'image/png' };
-        default:
-            return { name: 'image', code: 'image/*' };
-    }
 }

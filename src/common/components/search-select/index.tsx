@@ -7,7 +7,7 @@ import FieldError from 'src/common/components/field-error';
 import './search-select.scss';
 
 interface SearchSelectProps<ValueType = any>
-    extends Omit<SelectProps<ValueType | ValueType[]>, 'children' > {
+    extends Omit<SelectProps<ValueType | ValueType[]>, 'children'> {
     debounceTimeout?: number;
     isFetching?: boolean;
     name?: string;
@@ -23,6 +23,8 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
     ...props
 }) => {
     const [field, meta, helper] = useField(name);
+
+    const isError = meta.error && meta.touched;
 
     return (
         <div className="select">
@@ -43,7 +45,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
                 listHeight={ 150 }
                 onBlur={ () => helper.setTouched(true) }
             />
-            <FieldError visibility={ meta.error && meta.touched } errorMessage={ meta.error } />
+            { isError && <FieldError errorMessage={ meta.error } /> }
         </div>
     );
 };

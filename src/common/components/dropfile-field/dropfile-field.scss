@@ -10,13 +10,16 @@
     min-height: 40px;
     width: 100%;
     border-radius: 8px;
-    border: 1px dotted #9b9b9b;
+    border: 1px solid #d9d9d9;
 
     transition: all 0.2s ease-in-out ;
     &.active {
       border-color: #4096ff;
       box-shadow: 0 0 0 2px #0591FF19;
       background-color: #FBFBFB;
+    }
+    &.error {
+      border-color: #ff0000;
     }
     &.disabled {
       color: #0000003F;
@@ -35,7 +38,14 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-height: 100px;
     padding-left: 12px;
+    overflow: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
     &-empty {
       display: flex;
       justify-content: space-between;
@@ -45,21 +55,41 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      &:first-child {
+        margin-top: 8px;
+      }
+      &:last-child {
+        margin-bottom: 8px;
+      }
     }
   }
   &__placeholder {
     color: #BFBFBF;
   }
   &__document {
-    color: #5795FD;
-    &:before {
-      content: '✓';
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+    &-name {
+      color: #5795FD;
+      width: 60%;
+      word-break: break-all;
+      white-space: normal;
+    }
+    &-size {
+      color: #BFBFBF;
+      margin-left: auto;
+    }
+    &-status {
       color: #16BB5B;
       margin-right: 12px;
     }
   }
   &__delete {
     margin-right: 12px;
+    margin-left: 12px;
   }
   &__button {
     width: 50px;

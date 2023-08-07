@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs';
+import { FieldWithDaData } from 'Src/common/types/common';
 import type { Gender } from 'src/common/types/customer';
-import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'Src/common/types/dadata';
+import { DaDataAddress, DaDataCountries } from 'Src/common/types/dadata';
 
 export interface GeneralInfoFieldsModel {
     firstName?: string;

@@ -1,15 +1,9 @@
 import { ElementType, HTMLProps, ReactNode } from 'react';
-import { DefaultOptionType } from 'rc-select/lib/Select';
+import { DaDataSelectOption } from 'Src/common/types/common';
 
 type Nullable<T> = T | null;
 
 export type DaDataSelectOptions<Val> = Array<DaDataSelectOption<Val>>;
-
-export interface DaDataSelectOption<Val> extends DefaultOptionType{
-    value: string;
-    label: string;
-    title: Val;
-}
 
 export interface DaDataResponse<T> {
     suggestions: Array<DaDataSuggestion<T>>;
@@ -47,10 +41,6 @@ export interface CommonProps<SuggestionType> {
     uid?: string;
     httpCacheTtl?: number;
     children?: ReactNode | undefined;
-}
-export interface FieldWithDaData<T> {
-    value: string;
-    dadataObj: T;
 }
 
 export interface DaDataCountries {

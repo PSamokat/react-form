@@ -1,4 +1,5 @@
-import { DaDataAddress, DaDataCountries, FieldWithDaData } from 'Src/common/types/dadata';
+import { FieldWithDaData } from 'Src/common/types/common';
+import { DaDataAddress, DaDataCountries } from 'Src/common/types/dadata';
 
 export interface ResidentialAddressFieldsModel {
     addressMatches?: boolean;
