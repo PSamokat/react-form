@@ -1,4 +1,4 @@
-import { FormRoutes } from '../../../forms/route-to-component-relation';
+import { FormRoutes } from 'src/forms/route-to-component-relation';
 
 export const stepsComposition: FormRoutes[] = [
     FormRoutes.GENERAL,
