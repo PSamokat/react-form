@@ -15,6 +15,7 @@ import FormHeader from 'src/common/components/form-header';
 import SimpleField from 'src/common/components/simple-field';
 import SimpleSelect from 'src/common/components/simple-select';
 import { useDaDataParty } from 'src/common/hooks/dadata';
+import { AcceptedDocumentType } from 'src/common/types/common';
 import { OpfType } from 'src/common/types/customer';
 import { convertToInitialValues, convertToStoreValue } from 'src/forms/ownership-type/converter';
 import { OwnershipTypeFieldModel } from 'src/forms/ownership-type/form-model';
@@ -57,6 +58,7 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
                     required={ true }
                     disabled={ isSubmitting }
                     multiple={ true }
+                    acceptedTypes={ [AcceptedDocumentType.PDF] }
                 />
             </Col>
             <Col span={ 7 }>
@@ -84,6 +86,7 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
                     required={ true }
                     disabled={ isSubmitting }
                     multiple={ false }
+                    acceptedTypes={ [AcceptedDocumentType.PNG] }
                 />
             </Col>
             <Col span={ 12 }>
@@ -92,6 +95,7 @@ const OwnershipIndividualFormFragment: React.FC<FormikProps<OwnershipTypeFieldMo
                     label="Скан договора аренды помещения (офиса)"
                     disabled={ values.hasContract || isSubmitting }
                     multiple={ true }
+                    acceptedTypes={ [AcceptedDocumentType.JPEG] }
                 />
             </Col>
             <Col span={ 12 }>
@@ -155,6 +159,7 @@ const OwnershipLegalFormFragment: React.FC<FormikProps<OwnershipTypeFieldModel>>
                     multiple={ true }
                     disabled={ isSubmitting }
                     required={ true }
+                    acceptedTypes={ [AcceptedDocumentType.PDF] }
                 />
             </Col>
             <Col span={ 7 }>
