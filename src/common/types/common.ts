@@ -35,10 +35,11 @@ export function getDocumentTypeInfo(type: AcceptedDocumentType): DocumentTypeInf
     }
 }
 
-export interface DaDataSelectOption<Val> extends DefaultOptionType{
+export interface DaDataSelectOption<T> extends DefaultOptionType{
     value: string;
     label: string;
-    title: Val;
+    title: string;
+    data: T;
 }
 
 export interface FieldWithDaData<T> {

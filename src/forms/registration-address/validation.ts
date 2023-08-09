@@ -12,7 +12,7 @@ export const registrationAddressFieldsSchema = object().shape<SchemaObject<Regis
     street: dadataAddressScheme(),
     house: dadataAddressScheme(),
     apartment: string().when('hasNoApartment', {
-        is: true,
+        is: false,
         then: (schema) => schema.required('Заполните поле'),
     }),
     registrationDate: date().required('Обязательное поле'),

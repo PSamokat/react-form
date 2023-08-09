@@ -13,12 +13,13 @@ import SearchSelect from 'src/common/components/search-select';
 import SimpleField from 'src/common/components/simple-field';
 import { useDaDataAddress, useDaDataCountries } from 'src/common/hooks/dadata';
 import { DaDataGranularType } from 'src/common/types/dadata';
-import { convertToInitialValues } from 'src/forms/registration-address/converter';
 import { RegistrationAddressFieldsModel } from 'src/forms/registration-address/form-model';
 import { registrationAddressFieldsSchema } from 'src/forms/registration-address/validation';
 import { FormRoutes } from 'src/forms/route-to-component-relation';
 import { RootState } from 'src/store';
 import { formActions } from 'src/store/reducers/form';
+
+import { convertToInitialValues, convertToStoreValue } from './converter';
 
 import './registration-address.scss';
 
@@ -54,7 +55,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
     const handleOnChangeValue = (fieldName, value, option) => {
         setFieldValue(fieldName, {
             value,
-            dadataObj: option.title,
+            dadataObj: option.data,
         });
     };
 
@@ -87,6 +88,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         options={ countrySuggestion }
                         onSearch={ (value) => handleOnSearch('country', value) }
                         onChange={ (value, option) => handleOnChangeValue('country', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('country', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -100,6 +102,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         options={ regionSuggestion }
                         onSearch={ (value) => handleOnSearch('region', value) }
                         onChange={ (value, option) => handleOnChangeValue('region', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('region', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -113,6 +116,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         options={ citySuggestion }
                         onSearch={ (value) => handleOnSearch('city', value) }
                         onChange={ (value, option) => handleOnChangeValue('city', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('city', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -126,6 +130,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         options={ streetSuggestion }
                         onSearch={ (value) => handleOnSearch('street', value) }
                         onChange={ (value, option) => handleOnChangeValue('street', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('street', value, option) }
                     />
                 </Col>
                 <Col span={ 3 }>
@@ -139,6 +144,7 @@ const RegistrationFormFragment: React.FC<FormikProps<RegistrationAddressFieldsMo
                         options={ houseSuggestion }
                         onSearch={ (value) => handleOnSearch('house', value) }
                         onChange={ (value, option) => handleOnChangeValue('house', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('house', value, option) }
                     />
                 </Col>
                 <Col span={ 3 }>
@@ -182,7 +188,7 @@ const RegistrationAddress: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleSubmit = async (data: RegistrationAddressFieldsModel): Promise<void> => {
-        dispatch(formActions.setRegistrationAddress(data));
+        dispatch(formActions.setRegistrationAddress(convertToStoreValue(data)));
         await new Promise((resolve) => setTimeout(resolve, 800));
         navigate(FormRoutes.RESIDENTIAL);
     };

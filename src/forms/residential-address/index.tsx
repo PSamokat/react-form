@@ -54,7 +54,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
     const handleOnChangeValue = (fieldName, value, option) => {
         setFieldValue(fieldName, {
             value,
-            dadataObj: option.title,
+            dadataObj: option.data,
         });
     };
 
@@ -101,6 +101,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
                         options={ countrySuggestion }
                         onSearch={ (value) => handleOnSearch('country', value) }
                         onChange={ (value, option) => handleOnChangeValue('country', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('country', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -114,6 +115,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
                         options={ regionSuggestion }
                         onSearch={ (value) => handleOnSearch('region', value) }
                         onChange={ (value, option) => handleOnChangeValue('region', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('region', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -127,6 +129,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
                         options={ citySuggestion }
                         onSearch={ (value) => handleOnSearch('city', value) }
                         onChange={ (value, option) => handleOnChangeValue('city', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('city', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -140,6 +143,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
                         options={ streetSuggestion }
                         onSearch={ (value) => handleOnSearch('street', value) }
                         onChange={ (value, option) => handleOnChangeValue('street', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('street', value, option) }
                     />
                 </Col>
                 <Col span={ 3 }>
@@ -153,6 +157,7 @@ const ResidentialFormFragment: React.FC<FormikProps<ResidentialAddressFieldsMode
                         options={ houseSuggestion }
                         onSearch={ (value) => handleOnSearch('house', value) }
                         onChange={ (value, option) => handleOnChangeValue('house', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('house', value, option) }
                     />
                 </Col>
                 <Col span={ 3 }>

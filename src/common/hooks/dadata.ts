@@ -40,7 +40,8 @@ export const useDaDataCountries: (
             data.map((suggestion) => ({
                 label: suggestion.value,
                 value: suggestion.value,
-                title: suggestion.data,
+                title: suggestion.data.name,
+                data: suggestion.data,
             })),
         [data],
     );
@@ -87,7 +88,8 @@ export const useDaDataAddress: (
             data.map((suggestion) => ({
                 label: suggestion.value,
                 value: suggestion.value,
-                title: suggestion.data,
+                title: suggestion.unrestricted_value,
+                data: suggestion.data,
             })),
         [data],
     );

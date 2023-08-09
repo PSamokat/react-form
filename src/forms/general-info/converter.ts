@@ -3,7 +3,7 @@ import type { CustomerInfo } from 'Src/common/types/customer';
 
 import type { GeneralInfoFieldsModel } from './form-model';
 
-export function convertToInitialValues(data: CustomerInfo): GeneralInfoFieldsModel {
+export const convertToInitialValues: (data: CustomerInfo) => GeneralInfoFieldsModel = (data) => {
     const { personInfo } = data;
     const {
         firstName, surName, lastName, birthPlace, birthDate, city, gender, citizenship,
@@ -20,4 +20,13 @@ export function convertToInitialValues(data: CustomerInfo): GeneralInfoFieldsMod
         birthDate: dayjs(birthDate),
         birthPlace,
     };
-}
+};
+
+export const convertToStoreValue: (data: GeneralInfoFieldsModel) => Partial<CustomerInfo> = (
+    data,
+) => ({
+    personInfo: {
+        ...data,
+        birthDate: data.birthDate.valueOf(),
+    },
+});

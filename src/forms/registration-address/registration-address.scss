@@ -4,10 +4,11 @@
   flex-grow: 3;
   &__apartment {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    max-height: 57px;
   }
   &__checkbox {
-    margin-top: 10px;
     color: #808080;
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
 }

@@ -17,7 +17,7 @@ import { formActions } from 'src/store/reducers/form';
 
 import { FormRoutes } from '../route-to-component-relation';
 
-import { convertToInitialValues } from './converter';
+import { convertToInitialValues, convertToStoreValue } from './converter';
 import type { GeneralInfoFieldsModel } from './form-model';
 import { generalInfoScheme } from './validation';
 
@@ -38,7 +38,7 @@ const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({
     const handleOnChangeValue = (fieldName, value, option) => {
         setFieldValue(fieldName, {
             value,
-            dadataObj: option.title,
+            dadataObj: option.data,
         });
     };
 
@@ -98,6 +98,7 @@ const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({
                         options={ citySuggestion }
                         onSearch={ (value) => handleOnSearch('city', value) }
                         onChange={ (value, option) => handleOnChangeValue('city', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('city', value, option) }
                     />
                 </Col>
                 <Col span={ 12 }>
@@ -112,6 +113,7 @@ const GeneralFormFragment: React.FC<FormikProps<GeneralInfoFieldsModel>> = ({
                         onSearch={ (value) => handleOnSearch('citizenship', value) }
                         onChange={ (value, option) =>
                             handleOnChangeValue('citizenship', value, option) }
+                        onSelect={ (value, option) => handleOnChangeValue('citizenship', value, option) }
                     />
                 </Col>
                 <Col span={ 6 }>
@@ -145,7 +147,7 @@ const GeneralInfo: React.FC = () => {
     const navigate = useNavigate();
     const handleSubmit = async (value: GeneralInfoFieldsModel): Promise<void> => {
         await new Promise((resolve) => setTimeout(resolve, 800));
-        dispatch(formActions.setGeneralInfo(value));
+        dispatch(formActions.setGeneralInfo(convertToStoreValue(value)));
         navigate(FormRoutes.OWNERSHIP);
     };
 

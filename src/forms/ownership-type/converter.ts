@@ -20,7 +20,7 @@ export const convertToInitialValues: (data: CustomerInfo) => OwnershipTypeFieldM
         ogrn,
         opfType,
         registrationDate: registrationDate ? dayjs(registrationDate) : null,
-        hasContract,
+        hasContract: typeof hasContract === 'undefined' ? false : !hasContract,
         fullName,
         shortName,
         scanInn,
@@ -42,5 +42,6 @@ export const convertToStoreValue: (data: OwnershipTypeFieldModel) => Partial<Cus
     legalInfo: {
         ...omit(data, ['scanInn', 'scanOgrn', 'scanEgrn', 'scanContract']),
         registrationDate: data.registrationDate.valueOf(),
+        hasContract: !data.hasContract,
     },
 });
