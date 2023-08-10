@@ -43,7 +43,7 @@ const DropFileField: React.FC<DropFileFieldProps> = ({
     } = useDropzone({
         noClick: true,
         disabled,
-        accept: acceptedTypes.length > 0 ? accept : { '*': [] },
+        accept: acceptedTypes.length > 0 ? accept : {},
         ...props,
     });
 

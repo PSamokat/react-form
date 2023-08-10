@@ -1,7 +1,12 @@
 import { FieldWithDaData } from 'src/common/types/common';
+import { OpfType } from 'src/common/types/customer';
 import { DaDataAddress, DaDataCountries } from 'src/common/types/dadata';
 import { formatSize } from 'src/common/utils/common';
-import { mixed, MixedSchema } from 'yup';
+import { isValidINN } from 'src/common/utils/inn-verifier';
+import { isValidOGRN } from 'src/common/utils/ogrn-verifier';
+import {
+    mixed, MixedSchema, string, StringSchema,
+} from 'yup';
 
 type TypeAddressCheckerFn = (dadataField: FieldWithDaData<DaDataAddress>) => {
     path: keyof FieldWithDaData<DaDataAddress>;
@@ -95,7 +100,7 @@ const CountryChecker: Record<
     },
 };
 
-export const dadataAddressScheme: (
+export const dadataAddressSchema: (
     message?: string
 ) => MixedSchema<FieldWithDaData<DaDataAddress>> = (message = 'Введите адресс') =>
     mixed<FieldWithDaData<DaDataAddress>>().test('dadata test', message, (field, context) => {
@@ -120,7 +125,7 @@ export const dadataAddressScheme: (
         return true;
     });
 
-export const dadataCountryScheme: (
+export const dadataCountrySchema: (
     message?: string
 ) => MixedSchema<FieldWithDaData<DaDataCountries>> = (message = 'Введите страну') =>
     mixed<FieldWithDaData<DaDataCountries>>().test('dadata test', message, (field, context) => {
@@ -144,7 +149,7 @@ export const dadataCountryScheme: (
         return true;
     });
 
-export const fileCheckScheme: (size?: number, message?: string) => MixedSchema<File[]> = (
+export const fileCheckSchema: (size?: number, message?: string) => MixedSchema<File[]> = (
     size = 5 * 1024 * 1024,
     message = 'Прикрепите файл',
 ) =>
@@ -185,3 +190,49 @@ export const fileCheckScheme: (size?: number, message?: string) => MixedSchema<F
 
         return true;
     });
+
+export const innCheckSchema: (
+    messageForIndividual?: string,
+    messageForOthers?: string
+) => StringSchema = (
+    messageForIndividual = 'Необходимо 12 цифр',
+    messageForOthers = 'Необходимо 10 цифр',
+) =>
+    string()
+        .required('Обязательное поле')
+        .when('opfType', {
+            is: OpfType.INDIVIDUAL,
+            then: (schema) =>
+                schema
+                    .min(12, messageForIndividual)
+                    .max(12, messageForIndividual)
+                    .test('inn-sum', 'Некорректный ИНН', (value) => value && isValidINN(value)),
+            otherwise: (schema) =>
+                schema
+                    .min(10, messageForOthers)
+                    .max(10, messageForOthers)
+                    .test('inn-sum', 'Некорректный ИНН', (value) => value && isValidINN(value)),
+        });
+
+export const ogrnCheckScheme: (
+    messageForIndividual?: string,
+    messageForOthers?: string
+) => StringSchema = (
+    messageForIndividual = 'Необходимо 15 цифр',
+    messageForOthers = 'Необходимо 13 цифр',
+) =>
+    string()
+        .required('Обязательное поле')
+        .when('opfType', {
+            is: OpfType.INDIVIDUAL,
+            then: (schema) =>
+                schema
+                    .min(15, messageForIndividual)
+                    .max(15, messageForIndividual)
+                    .test('inn-sum', 'Некорректный ОГРНИП', (value) => value && isValidOGRN(value)),
+            otherwise: (schema) =>
+                schema
+                    .min(13, messageForOthers)
+                    .max(13, messageForOthers)
+                    .test('inn-sum', 'Некорректный ОГРН', (value) => value && isValidOGRN(value)),
+        });
